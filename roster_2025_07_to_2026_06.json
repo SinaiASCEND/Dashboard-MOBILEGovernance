@@ -1,0 +1,308 @@
+{
+  "era": "2025-07_to_2026-06",
+  "label": "AY July 2025 – June 2026 EEC Membership (Bylaws v1.0)",
+  "committeeName": "Executive Education Committee",
+  "committeeAbbreviation": "EEC",
+  "effectiveFrom": "2025-07-01",
+  "effectiveTo": "2026-06-30",
+  "governanceVersionLabel": "EEC Bylaws v1.0 (effective July 2025)",
+  "useDualAppendices": true,
+  "totalVotingSeats": 19,
+  "quorumRequired": 10,
+  "attendanceGroupLabels": {
+    "votingPresent": "Voting Members Present",
+    "votingAbsent": "Voting Members Absent",
+    "thirdGroup": "Guests/Ex Officio Members Present (Non-Voting)",
+    "fourthGroup": "CA Leadership Present (Non-Voting)"
+  },
+  "subcommittees": [
+    "PCCS",
+    "CCS",
+    "CIS",
+    "CSS",
+    "AES"
+  ],
+  "chair": {
+    "name": "Michelle Francis",
+    "credentials": "MD",
+    "role": "Chair, Executive Education Committee",
+    "signsAs": "Chair"
+  },
+  "administrativeLead": {
+    "name": "Shashi Anand",
+    "credentials": "MEd",
+    "role": "EEC Administrative Lead; Associate Dean for UME Affairs"
+  },
+  "recordingSecretary": {
+    "name": "Fatima Shafiq",
+    "credentials": "",
+    "role": "Project Manager, Curricular Affairs"
+  },
+  "members": [
+    {
+      "name": "Michelle Francis",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Chair (presiding); Assistant Professor – OB/GYN"
+    },
+    {
+      "name": "Ganesh Gunasekaran",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Educator at Large; Section Chief of Hepatobiliary Surgery"
+    },
+    {
+      "name": "Eric Kutscher",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Educator at Large; Assistant Professor – General Internal Medicine"
+    },
+    {
+      "name": "Arvind Kamthan",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Educator at Large; Associate Professor – Hematology and Medical Oncology"
+    },
+    {
+      "name": "Brian Rice",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Educator at Large; Assistant Professor – Hospital Medicine"
+    },
+    {
+      "name": "Jessica Reid-Adam",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Educator at Large; Professor – Medical Education, Pediatric"
+    },
+    {
+      "name": "Kyunghyun Lee",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Educator at Large; Assistant Professor – Hospital Medicine"
+    },
+    {
+      "name": "Richard Stern",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Educator at Large; Associate Professor – Radiology, Medical Education"
+    },
+    {
+      "name": "Sreekala Raghavan",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Educator at Large; Associate Professor – General Internal Medicine, Medical Education"
+    },
+    {
+      "name": "Kris Alpi",
+      "credentials": "PhD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Associate Dean for Libraries & Information Sciences"
+    },
+    {
+      "name": "Tonia Kim",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Curricular Leader (Phase 1); Module Director (Pre-clerkship)"
+    },
+    {
+      "name": "Alexandros Polydorides",
+      "credentials": "MD PhD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Curricular Leader (Phase 1); Module Director (Pre-clerkship)"
+    },
+    {
+      "name": "Eve Merrill",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Curricular Leader (Phase 2); Clerkship Director"
+    },
+    {
+      "name": "Cynthia Abraham",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Curricular Leader (Phase 2); Clerkship Director"
+    },
+    {
+      "name": "Craig Katz",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Career and Professional Development (CaPD) Advisor"
+    },
+    {
+      "name": "Vannita Simma-Chiang",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Specialty Advisor; Director of Specialty Advising"
+    },
+    {
+      "name": "Alan Zhang",
+      "credentials": "",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Student Representative, M2 (ASCEND Phase 1→Phase 2)"
+    },
+    {
+      "name": "Jamie Frost",
+      "credentials": "",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Student Representative, M3 (Legacy)"
+    },
+    {
+      "name": "Farimata Mbaye",
+      "credentials": "",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Student Representative, M4 (Legacy)"
+    },
+    {
+      "name": "David C. Thomas",
+      "credentials": "MD MHPE",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Dean for Medical Education"
+    },
+    {
+      "name": "Rainier Soriano",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Sr. Associate Dean for Curricular Affairs"
+    },
+    {
+      "name": "Valerie Parkas",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Interim Sr. Associate Dean for Student Affairs",
+      "effectiveFrom": "2025-07-01",
+      "effectiveTo": "2025-12-31",
+      "roleByPeriod": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "effectiveTo": "2026-06-30",
+          "role": "Ex Officio; Sr. Associate Dean for Admissions & Recruitment"
+        }
+      ]
+    },
+    {
+      "name": "Steve Paik",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Sr. Associate Dean for Student Affairs",
+      "effectiveFrom": "2026-01-01"
+    },
+    {
+      "name": "Martha Arden",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Chair, Promotions Committee"
+    },
+    {
+      "name": "Robert Fallar",
+      "credentials": "PhD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Associate Dean for Assessment and Evaluation",
+      "effectiveFrom": "2025-07-01",
+      "effectiveTo": "2026-03-31"
+    },
+    {
+      "name": "Jacob Shreffler",
+      "credentials": "PhD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Sr. Associate Dean for Assessment, Evaluation, and Accreditation",
+      "effectiveFrom": "2026-04-01"
+    },
+    {
+      "name": "Talia Swartz",
+      "credentials": "MD PhD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Sr. Associate Dean for MD-PhD Education"
+    },
+    {
+      "name": "Barbara Masi",
+      "credentials": "PhD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Director of Quality, Compliance, and Accreditation"
+    },
+    {
+      "name": "Shashi Anand",
+      "credentials": "MEd",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; EEC Administrative Lead; Associate Dean for UME Affairs"
+    },
+    {
+      "name": "Fatima Shafiq",
+      "credentials": "",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Recording Secretary; Project Manager, Curricular Affairs"
+    },
+    {
+      "name": "Staci Leisman",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "Chair, Pre-Clerkship Curriculum Subcommittee (PCCS)"
+    },
+    {
+      "name": "Ravi Ramaswamy",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "Chair, Curricular Integration Subcommittee (CIS)"
+    },
+    {
+      "name": "Teddy Holzer",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "Chair, Clinical Curriculum Subcommittee (CCS)"
+    },
+    {
+      "name": "Rainier Soriano",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "Chair, Curriculum Steering Subcommittee (CSS)"
+    },
+    {
+      "name": "Vasundhara Singh",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "Director of Medical Student Electives"
+    },
+    {
+      "name": "Nisha Chadha",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "APEX Director"
+    }
+  ]
+}

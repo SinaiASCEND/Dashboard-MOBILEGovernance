@@ -1,0 +1,316 @@
+{
+  "era": "2026-07_onward",
+  "label": "AY July 2026 onward EEC Membership (Bylaws v2.0)",
+  "committeeName": "Executive Education Committee",
+  "committeeAbbreviation": "EEC",
+  "effectiveFrom": "2026-07-01",
+  "effectiveTo": null,
+  "governanceVersionLabel": "EEC Bylaws v2.0 (effective July 2026)",
+  "useDualAppendices": true,
+  "totalVotingSeats": 13,
+  "quorumRequired": 7,
+  "attendanceGroupLabels": {
+    "votingPresent": "Voting Members Present",
+    "votingAbsent": "Voting Members Absent",
+    "thirdGroup": "Guests/Ex Officio Members Present (Non-Voting)",
+    "fourthGroup": "CA Leadership Present (Non-Voting)"
+  },
+  "subcommittees": [
+    "PCCS",
+    "CCS",
+    "CIS",
+    "AES"
+  ],
+  "chair": {
+    "name": "Michelle Francis",
+    "credentials": "MD",
+    "role": "Faculty Co-Chair, Executive Education Committee (outgoing — term November 2026)",
+    "signsAs": "Faculty Co-Chair"
+  },
+  "administrativeLead": {
+    "name": "Rainier Soriano",
+    "credentials": "MD",
+    "role": "Administrative Co-Chair; Senior Associate Dean for Curricular Affairs"
+  },
+  "recordingSecretary": {
+    "name": "Fatima Shafiq",
+    "credentials": "",
+    "role": "Project Manager, Curricular Affairs"
+  },
+  "members": [
+    {
+      "name": "Michelle Francis",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Faculty Co-Chair (outgoing — term November 2026)"
+    },
+    {
+      "name": "TBA General Faculty 1",
+      "credentials": "",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "General Faculty (vacant)"
+    },
+    {
+      "name": "TBA General Faculty 2",
+      "credentials": "",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "General Faculty (vacant)"
+    },
+    {
+      "name": "Ganesh Gunasekaran",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "General Faculty; Section Chief of Hepatobiliary Surgery (term July 2025–July 2028)"
+    },
+    {
+      "name": "Arvind Kamthan",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "General Faculty; Associate Professor – Hematology and Medical Oncology (term July 2025–July 2028)"
+    },
+    {
+      "name": "Brian Rice",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "General Faculty; Assistant Professor – Hospital Medicine (term July 2025–July 2028)"
+    },
+    {
+      "name": "Kyunghyun Lee",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "General Faculty; Assistant Professor – Hospital Medicine (term July 2024–July 2027)"
+    },
+    {
+      "name": "Richard Stern",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "General Faculty; Associate Professor – Radiology, Medical Education (term July 2024–July 2027)"
+    },
+    {
+      "name": "Sreekala Raghavan",
+      "credentials": "MD",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "General Faculty; Associate Professor – General Internal Medicine, Medical Education (term July 2024–July 2027)"
+    },
+    {
+      "name": "TBA Phase 1 Student",
+      "credentials": "",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Student Representative, Phase 1 (term beginning July 2026)"
+    },
+    {
+      "name": "Alan Zhang",
+      "credentials": "",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Student Representative, Phase 2 (ASCEND)"
+    },
+    {
+      "name": "Jamie Frost",
+      "credentials": "",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Student Representative, Phase 3 (Legacy)"
+    },
+    {
+      "name": "TBA MSTP Student",
+      "credentials": "",
+      "voting": true,
+      "group": "votingPresent",
+      "role": "Student Representative, MSTP (term beginning July 2026)"
+    },
+    {
+      "name": "Tonia Kim",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "PCCS Faculty Co-Chair (term July 2026–July 2029)"
+    },
+    {
+      "name": "Deanna Chieco",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "CCS Faculty Co-Chair (term July 2026–July 2029)"
+    },
+    {
+      "name": "Leona Hess",
+      "credentials": "PhD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "CIS Faculty Co-Chair (term July 2026–July 2029)"
+    },
+    {
+      "name": "Michelle Francis",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "AES Faculty Co-Chair (term July 2026 onward)",
+      "note": "Holds both EEC Faculty Co-Chair and AES Faculty Co-Chair roles"
+    },
+    {
+      "name": "Eric Kutscher",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "General Faculty (non-voting); Assistant Professor – General Internal Medicine (term July 2025–July 2028)"
+    },
+    {
+      "name": "Cynthia Abraham",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "General Faculty (non-voting); Module Director (Pre-clerkship) (term December 2025–December 2028)"
+    },
+    {
+      "name": "Eve Merrill",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "General Faculty (non-voting); Clerkship Director (Inpatient Medicine)"
+    },
+    {
+      "name": "Brad Rosenberg",
+      "credentials": "MD PhD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "General Faculty (non-voting); Associate Professor – Microbiology (term July 2026–July 2029)"
+    },
+    {
+      "name": "Craig Katz",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "General Faculty (non-voting); Clinical Professor – Psychiatry, Medical Education, and Health System Design & Global Health (term December 2025–December 2028)"
+    },
+    {
+      "name": "Vannita Simma-Chiang",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "General Faculty (non-voting); Director of Specialty Advising (term March 2026–March 2029)"
+    },
+    {
+      "name": "Rainier Soriano",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Administrative Co-Chair; Senior Associate Dean for Curricular Affairs"
+    },
+    {
+      "name": "David C. Thomas",
+      "credentials": "MD MHPE",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Dean for Medical Education"
+    },
+    {
+      "name": "Steve Paik",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Sr. Associate Dean for Student Affairs"
+    },
+    {
+      "name": "Valerie Parkas",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Sr. Associate Dean for Admissions & Recruitment"
+    },
+    {
+      "name": "Martha Arden",
+      "credentials": "MD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Chair, Promotions Committee"
+    },
+    {
+      "name": "Jacob Shreffler",
+      "credentials": "PhD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Sr. Associate Dean for Assessment, Evaluation, and Accreditation"
+    },
+    {
+      "name": "Talia Swartz",
+      "credentials": "MD PhD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Sr. Associate Dean for MD-PhD Education"
+    },
+    {
+      "name": "Barbara Masi",
+      "credentials": "PhD",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Director of Quality, Compliance, and Accreditation"
+    },
+    {
+      "name": "Shashi Anand",
+      "credentials": "MEd",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Ex Officio; Associate Dean for UME Affairs"
+    },
+    {
+      "name": "Fatima Shafiq",
+      "credentials": "",
+      "voting": false,
+      "group": "thirdGroup",
+      "role": "Recording Secretary; Project Manager, Curricular Affairs"
+    },
+    {
+      "name": "Staci Leisman",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "PCCS Administrative Co-Chair"
+    },
+    {
+      "name": "Teddy Holzer",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "CCS Administrative Co-Chair"
+    },
+    {
+      "name": "Ravi Ramaswamy",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "CIS Administrative Co-Chair"
+    },
+    {
+      "name": "Christopher Strother",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "AES Administrative Co-Chair; Director of Clinical Competency"
+    },
+    {
+      "name": "Vasundhara Singh",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "Director of Medical Student Electives"
+    },
+    {
+      "name": "Nisha Chadha",
+      "credentials": "MD",
+      "voting": false,
+      "group": "fourthGroup",
+      "role": "APEX Director"
+    }
+  ]
+}
