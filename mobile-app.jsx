@@ -665,7 +665,7 @@ function SectionScreen({ section, onSection, onItem }) {
     case "overview":       return <S.OverviewScreen   onSection={onSection} onItem={onItem} />;
     case "actions":        return <S.ActionsScreen    onItem={onItem} />;
     case "motions":        return <S.MotionsScreen    onItem={onItem} />;
-    case "members":        return <S.MembersScreen    onItem={onItem} />;
+    case "members":        return <S.MembersScreen    onItem={onItem} onSection={onSection} />;
     case "attendance":     return <S.AttendanceScreen />;
     case "reviews":        return <S.ReviewsScreen    onItem={onItem} />;
     case "policies":       return <S.PoliciesScreen   onItem={onItem} />;

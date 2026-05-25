@@ -256,6 +256,144 @@ const SECTIONS_CSS = `
   margin-right: 4px;
 }
 .m-explore-row .badge.warn { background: var(--bad-tint); color: var(--bad); }
+
+/* ─── Print / PDF — Attendance ──────────────────────────────────────────── */
+.print-header { display: none; }
+
+@media print {
+  @page {
+    size: Letter portrait;
+    margin: 0.6in 0.65in;
+  }
+
+  /* Reset page chrome */
+  html, body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  /* Hide every off-stage element by default */
+  body.printing-attendance .stage > *:not(.phone-col),
+  body.printing-attendance .device > .notch,
+  body.printing-attendance .device-caption,
+  body.printing-attendance .m-status,
+  body.printing-attendance .m-nav,
+  body.printing-attendance .panel,
+  body.printing-attendance .no-print {
+    display: none !important;
+  }
+
+  /* Strip phone frame so the report flows full page */
+  body.printing-attendance .stage {
+    display: block !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    background: #fff !important;
+  }
+  body.printing-attendance .phone-col,
+  body.printing-attendance .device,
+  body.printing-attendance .screen,
+  body.printing-attendance #root,
+  body.printing-attendance .m-screen {
+    all: revert;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+  }
+
+  body.printing-attendance .m-body.print-root {
+    padding: 0 !important;
+    background: #fff !important;
+    color: #000 !important;
+    overflow: visible !important;
+    height: auto !important;
+    font-family: var(--serif), Georgia, serif;
+  }
+
+  /* Print header (visible only when printing) */
+  body.printing-attendance .print-header {
+    display: block !important;
+    margin: 0 0 18px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #000;
+  }
+  body.printing-attendance .print-header .brand-line {
+    font-size: 10pt;
+    letter-spacing: 0.03em;
+    color: #333;
+    margin-bottom: 6px;
+    font-family: var(--sans);
+  }
+  body.printing-attendance .print-header h1 {
+    font-family: var(--serif);
+    font-size: 22pt;
+    font-weight: 600;
+    margin: 0 0 6px;
+    letter-spacing: -0.015em;
+  }
+  body.printing-attendance .print-header .meta-line {
+    font-size: 9.5pt;
+    color: #555;
+    font-family: var(--sans);
+  }
+
+  /* Cards — flatten styling for print */
+  body.printing-attendance .m-card.print-section {
+    box-shadow: none !important;
+    border: 1px solid #999 !important;
+    border-radius: 6px !important;
+    margin: 0 0 14px !important;
+    background: #fff !important;
+    break-inside: avoid;
+  }
+  body.printing-attendance .m-card.print-section .head {
+    background: #f3f3f3 !important;
+    padding: 8px 12px !important;
+    border-bottom: 1px solid #999 !important;
+  }
+  body.printing-attendance .m-card.print-section .head h3 {
+    font-family: var(--serif);
+    font-size: 13pt;
+    margin: 0;
+    font-weight: 600;
+  }
+
+  /* Attendance bars — make sure colors print */
+  body.printing-attendance .m-attbar .track {
+    background: #e5e5e5 !important;
+    border: 1px solid #bbb;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body.printing-attendance .m-attbar .fill {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  body.printing-attendance .m-attbar .pct {
+    color: #000 !important;
+    font-weight: 600;
+  }
+
+  /* Repeat headers across pages */
+  body.printing-attendance .m-card.print-section .head {
+    break-after: avoid;
+  }
+
+  /* Avoid splitting individual member/meeting rows across pages */
+  body.printing-attendance .m-card.print-section > div {
+    break-inside: avoid;
+  }
+}
 `;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────
@@ -389,6 +527,8 @@ function ExploreList({ onPick }) {
   const phaseCount = window.EEC.REVIEWS.filter(r => /phase/i.test(r.title)).length;
 
   const items = [
+    { kind: "members",       label: "Membership",              sub: "All members · filter by committee",          bg: "var(--brand-violet)", badge: window.EEC.MEMBERS.filter(m => m.tracked).length },
+    { kind: "attendance",    label: "EEC Attendance",          sub: "Voting record · print or save as PDF",       bg: "var(--brand-cyan-deep)", badge: null },
     { kind: "review-full",   label: "Full Curriculum Review", sub: "AY 2023–24 · integrated longitudinal report", bg: "var(--brand-violet)", badge: null },
     { kind: "reviews-phase", label: "Phase Reviews",          sub: "Phase 1 (Pre-Clerkship) · Phase 2 (Clerkship)",   bg: "var(--brand-cyan)",   badge: phaseCount },
     { kind: "action-plans",  label: "Action Plans",            sub: "LCME closed-loop tracker items",                  bg: "var(--brand-magenta)", badge: trackerCount },
@@ -981,7 +1121,7 @@ function MotionDetail({ id }) {
 }
 
 // ─── SECTION SCREEN: Members ──────────────────────────────────────────────
-function MembersScreen({ onItem }) {
+function MembersScreen({ onItem, onSection }) {
   const [q, setQ] = useStateMS("");
   const [committee, setCommittee] = useStateMS("ALL");
 
@@ -1013,6 +1153,31 @@ function MembersScreen({ onItem }) {
           Faculty, staff, and student representatives across EEC and its four subcommittees.
         </div>
       </div>
+
+      {onSection && (
+        <button
+          className="m-explore-row"
+          onClick={() => onSection("attendance")}
+          style={{ marginBottom: 12 }}
+        >
+          <span className="ic" style={{ background: "var(--brand-cyan-deep)" }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="5" width="18" height="16" rx="2"/>
+              <path d="M3 10h18M8 3v4M16 3v4"/>
+              <circle cx="8" cy="15" r="1.4" fill="currentColor"/>
+              <circle cx="12" cy="15" r="1.4" fill="currentColor"/>
+              <circle cx="16" cy="15" r="1.4" fill="currentColor"/>
+            </svg>
+          </span>
+          <span style={{ minWidth: 0 }}>
+            <div className="ttl">Check EEC Attendance</div>
+            <div className="sub">Voting record by meeting and by member · print / PDF</div>
+          </span>
+          <span style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--grey-7)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
+          </span>
+        </button>
+      )}
 
       <div className="m-search">
         <span className="ic">
@@ -1169,9 +1334,36 @@ function AttendanceScreen() {
     })
     .sort((a, b) => b.rate - a.rate);
 
+  const handlePrint = () => {
+    document.body.classList.add("printing-attendance");
+    const cleanup = () => {
+      document.body.classList.remove("printing-attendance");
+      window.removeEventListener("afterprint", cleanup);
+    };
+    window.addEventListener("afterprint", cleanup);
+    // Slight delay so the class applies before the print dialog snapshots layout
+    setTimeout(() => window.print(), 50);
+  };
+
+  const printedOn = new Date().toLocaleDateString("en-US", {
+    weekday: "long", year: "numeric", month: "long", day: "numeric"
+  });
+
   return (
-    <div className="m-body">
-      <div className="m-section-head">
+    <div className="m-body print-root">
+      {/* Print-only header (hidden on screen) */}
+      <div className="print-header">
+        <div className="brand-line">
+          <strong>ASCEND Governance</strong> · Mount Sinai · Office of Curricular Affairs
+        </div>
+        <h1>EEC Attendance · AY 2025–26</h1>
+        <div className="meta-line">
+          Average attendance {avg}% across {M.length} filed meetings ·
+          {" "}{tracked.length} tracked members · Generated {printedOn}
+        </div>
+      </div>
+
+      <div className="m-section-head no-print">
         <div className="eyebrow">EEC · AY 2025–26</div>
         <h2>Attendance</h2>
         <div style={{ fontSize: 12, color: "var(--grey-11)", marginTop: 6, lineHeight: 1.45 }}>
@@ -1179,7 +1371,47 @@ function AttendanceScreen() {
         </div>
       </div>
 
-      <div className="m-kpi-grid">
+      {/* Print / PDF action row (hidden when printing) */}
+      <div className="no-print" style={{ display: "flex", gap: 8, margin: "0 0 14px" }}>
+        <button
+          onClick={handlePrint}
+          style={{
+            flex: 1, padding: "10px 14px", borderRadius: 10,
+            border: "0", background: "var(--ink)", color: "#fff",
+            fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600,
+            letterSpacing: "-0.01em", cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 6 2 18 2 18 9"/>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          Print
+        </button>
+        <button
+          onClick={handlePrint}
+          style={{
+            flex: 1, padding: "10px 14px", borderRadius: 10,
+            border: "1px solid var(--ink)", background: "#fff", color: "var(--ink)",
+            fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600,
+            letterSpacing: "-0.01em", cursor: "pointer",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+          }}
+          title="Use 'Save as PDF' as the destination in the print dialog"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="12" y1="18" x2="12" y2="12"/>
+            <polyline points="9 15 12 12 15 15"/>
+          </svg>
+          Save as PDF
+        </button>
+      </div>
+
+      <div className="m-kpi-grid no-print">
         <div className="m-kpi" style={{ borderTopColor: "var(--brand-cyan-deep)" }}>
           <div className="lbl">Average</div>
           <div className="val">{avg}%</div>
@@ -1192,7 +1424,7 @@ function AttendanceScreen() {
         </div>
       </div>
 
-      <div className="m-card">
+      <div className="m-card print-section">
         <div className="head"><h3>By meeting</h3></div>
         {M.map(m => (
           <div key={m.id} style={{ padding: "11px 14px", borderBottom: "1px solid var(--grey-2)" }}>
@@ -1216,7 +1448,7 @@ function AttendanceScreen() {
         ))}
       </div>
 
-      <div className="m-card">
+      <div className="m-card print-section">
         <div className="head"><h3>By member</h3></div>
         {tracked.slice(0, 30).map(m => (
           <div key={m.id} style={{ padding: "10px 14px", borderBottom: "1px solid var(--grey-2)" }}>
