@@ -711,7 +711,7 @@ function HomeScreen({ onPick, onSection }) {
   // OCA stats (recurring weekly schedule)
   const ocaNext = SCHED.nextMeeting("OCA");
 
-  const tiles = ["EEC", "PCCS", "CCS", "AES"].map(id => {
+  const tiles = ["EEC", "PCCS", "CCS", "CIS"].map(id => {
     const c = window.EEC.committeeById[id];
     return {
       ...c,
@@ -765,7 +765,7 @@ function HomeScreen({ onPick, onSection }) {
       {window.MobileSections && <window.MobileSections.ExploreList onPick={onSection} />}
 
       <div style={{ fontSize: 10.5, color: "var(--grey-7)", textAlign: "center", marginTop: 22, lineHeight: 1.55 }}>
-        16 EEC minutes filed through May 2026. Subcommittee minutes (PCCS · CCS · AES · CIS) and OCA minutes pending intake from each chair.
+        16 EEC minutes filed through May 2026. Subcommittee minutes (PCCS · CCS · CIS) and OCA minutes pending intake from each chair.
       </div>
     </div>
   );
