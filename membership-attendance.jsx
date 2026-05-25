@@ -279,6 +279,21 @@ function fmtDMM(s, style = "medium") {
 function AYToggle({ value, onChange }) {
   const R = window.ROSTERS;
   if (!R) return null;
+  // If there's only one academic year to choose from, render a compact
+  // read-only label instead of a toggle (no value to switch to).
+  if (R.AY_KEYS.length <= 1) {
+    return (
+      <div className="m-ay-row" style={{ justifyContent: "flex-start" }}>
+        <span className="lbl">AY</span>
+        <span style={{
+          fontFamily: "var(--sans)", fontSize: 12, fontWeight: 600,
+          color: "var(--ink)", padding: "5px 10px",
+        }}>
+          {R.AY_KEYS[0] || ""}
+        </span>
+      </div>
+    );
+  }
   return (
     <div className="m-ay-row">
       <span className="lbl">AY</span>

@@ -175,10 +175,17 @@ function hasMinutesFile(date) {
 
 window.MOBILE_SCHEDULE = {
   build,
-  // committeeMeetings(id) returns the merged list for a committee
+  // committeeMeetings(id) returns the merged list for a committee, scoped to
+  // the current academic year. Pre-AY meetings still exist in window.EEC but
+  // are hidden from the committee meetings UI.
   committeeMeetings(id) {
     if (!this._cache) this._cache = build();
-    return this._cache[id] || [];
+    const list = this._cache[id] || [];
+    const R = window.ROSTERS;
+    if (!R) return list;
+    const range = R.AY_RANGES[R.CURRENT_AY];
+    if (!range) return list;
+    return list.filter(e => e.date >= range.start && e.date <= range.end);
   },
   nextMeeting(id) {
     const today = new Date();

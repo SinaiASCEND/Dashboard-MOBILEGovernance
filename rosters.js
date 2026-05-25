@@ -175,8 +175,8 @@
     "2025-26": { start: "2025-07-01", end: "2026-06-30", label: "AY 2025–26" },
     "2026-27": { start: "2026-07-01", end: "2027-06-30", label: "AY 2026–27" },
   };
-  const AY_KEYS = ["2024-25", "2025-26", "2026-27"];
-  const CURRENT_AY = "2025-26";
+  const AY_KEYS = ["2026-27"];
+  const CURRENT_AY = "2026-27";
 
   function ayOf(dateStr) {
     if (!dateStr) return null;
