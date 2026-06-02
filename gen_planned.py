@@ -1,10 +1,24 @@
 #!/usr/bin/env python3
 """Parse the MASTER Agenda Tracker (EEC Agenda + Subcommittee Agendas tabs)
-into a static planned-agenda.js consumed by the mobile governance dashboard."""
-import datetime, re, json
+into a static planned-agenda.js consumed by the mobile governance dashboard.
+
+Usage:
+    python3 gen_planned.py [path-to-tracker.xlsx]
+If no path is given, it uses the most recent *Agenda_Tracker*.xlsx in the
+current folder.
+"""
+import datetime, re, json, sys, glob, os
 
 from openpyxl import load_workbook
-SRC = "MASTER_Agenda_Tracker_2026_05_18.xlsx"
+
+if len(sys.argv) > 1:
+    SRC = sys.argv[1]
+else:
+    cands = sorted(glob.glob("*Agenda_Tracker*.xlsx"), key=os.path.getmtime, reverse=True)
+    if not cands:
+        sys.exit("No tracker given and no *Agenda_Tracker*.xlsx found in this folder.")
+    SRC = cands[0]
+print(f"Reading: {SRC}")
 wb = load_workbook(SRC, read_only=True, data_only=True)
 
 MONTHS = {m: i for i, m in enumerate(
@@ -14,6 +28,17 @@ MONTHS = {m: i for i, m in enumerate(
 def clean(v):
     if v is None: return ""
     return str(v).replace("\xa0", " ").strip()
+
+def split_title(v):
+    """A title cell may pack a heading line + newline-separated sub-items
+    (e.g. a policy-review item listing each policy). First non-empty line is
+    the title; remaining non-empty lines become sub-items."""
+    s = (str(v) if v is not None else "").replace("\xa0", " ")
+    lines = [ln.strip() for ln in s.splitlines()]
+    lines = [ln for ln in lines if ln]
+    if not lines:
+        return "", []
+    return lines[0], lines[1:]
 
 def parse_date(v):
     if isinstance(v, datetime.datetime):
@@ -47,6 +72,7 @@ for r in ws.iter_rows(min_row=4, values_only=True):  # row 4 = header (1-indexed
     title = clean(r[1])
     if not (cur and title):
         continue
+    title, subitems = split_title(r[1])
     seq += 1
     item = {
         "n": seq,
@@ -59,6 +85,8 @@ for r in ws.iter_rows(min_row=4, values_only=True):  # row 4 = header (1-indexed
         "ready": clean(r[8]) if len(r) > 8 else None,  # READY TO GO?
         "planned": True,
     }
+    if subitems:
+        item["subitems"] = subitems
     by["EEC"][cur].append(item)
 
 # ---------- Subcommittee Agendas ----------
@@ -79,6 +107,7 @@ for r in ws.iter_rows(min_row=4, values_only=True):
     title = clean(r[2])
     if not (cursub and curdate and title) or title == "(no items scheduled)":
         continue
+    title, subitems = split_title(r[2])
     seq += 1
     item = {
         "n": seq,
@@ -87,6 +116,8 @@ for r in ws.iter_rows(min_row=4, values_only=True):
         "goesToEEC": parse_date(r[4]),
         "planned": True,
     }
+    if subitems:
+        item["subitems"] = subitems
     by.setdefault(cursub, {}).setdefault(curdate, []).append(item)
 
 # Only keep committees the dashboard knows about

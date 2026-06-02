@@ -525,7 +525,17 @@ function plannedFor(committee, date) {
 }
 
 function entryToMeeting(entry) {
-  if (entry.kind === "filed" && entry.m) return { ...entry.m, scheduled: false };
+  if (entry.kind === "filed" && entry.m) {
+    const m = entry.m;
+    // A "Scheduled"-status record is a not-yet-held meeting: attach planned agenda
+    // and treat it as scheduled (no minutes/motions/attendance yet).
+    if (m.minutesStatus === "Scheduled") {
+      const planned = plannedFor(m.committee, m.date);
+      const items = (m.items && m.items.length) ? m.items : planned;
+      return { ...m, items, scheduled: true, planned: items.length > 0 };
+    }
+    return { ...m, scheduled: false };
+  }
   // Synthesize a stub for scheduled-only entries, attaching any planned agenda.
   const planned = plannedFor(entry.committee, entry.date);
   return {
@@ -906,9 +916,12 @@ function MeetingRow({ entry, committee, onPick }) {
   const future = d >= today;
   const isFiled = entry.kind === "filed";
   const m = entry.m; // only present for filed entries
-  const planned = isFiled ? [] : plannedFor(entry.committee, entry.date);
+  // Not-yet-held = a synthesized scheduled stub, or a "Scheduled"-status filed record.
+  const unheld = !isFiled || (m && m.minutesStatus === "Scheduled");
+  const heldFiled = isFiled && !unheld;
+  const planned = unheld ? plannedFor(isFiled ? m.committee : entry.committee, isFiled ? m.date : entry.date) : [];
   const hasPlanned = planned.length > 0;
-  const items = isFiled ? (m.items || []).slice(0, 3) : [];
+  const items = heldFiled ? (m.items || []).slice(0, 3) : [];
 
   return (
     <button className="m-meet-row"
@@ -927,17 +940,17 @@ function MeetingRow({ entry, committee, onPick }) {
               : (entry.session || entry.time || "Scheduled")}
           </span>
           <span className={"status" + (future ? " future" : "")}>
-            {isFiled ? m.minutesStatus : (hasPlanned ? "Agenda set" : (future ? "Scheduled" : "Pending"))}
+            {hasPlanned ? "Agenda set" : (heldFiled ? m.minutesStatus : (future ? "Scheduled" : "Pending"))}
           </span>
         </div>
-        {isFiled && items.length > 0 ? (
+        {heldFiled && items.length > 0 ? (
           <ul className="agenda">
             {items.map((it, i) => <li key={i}>{shortAgenda(it)}</li>)}
             {m.items && m.items.length > 3 && (
               <li className="more">+{m.items.length - 3} more agenda items</li>
             )}
           </ul>
-        ) : isFiled ? (
+        ) : heldFiled ? (
           <ul className="agenda">
             {(m.topics || []).slice(0, 3).map((t, i) => <li key={i}>{t}</li>)}
           </ul>
@@ -1074,9 +1087,9 @@ function MeetingScreen({ entry, onPick }) {
                 <span style={{ flex: "0 0 auto", fontFamily: "var(--mono)", fontSize: 11, color: c.deep, fontWeight: 700, marginTop: 1 }}>{it.n || i + 1}</span>
                 <span style={{ flex: 1, minWidth: 0 }}>
                   <span style={{ fontSize: 12.5, color: "var(--ink)", lineHeight: 1.35 }}>{it.title}</span>
-                  {(it.category || it.owner) && (
+                  {(it.category || it.owner || (it.subitems && it.subitems.length)) && (
                     <span style={{ display: "block", fontSize: 10.5, color: "var(--grey-11)", marginTop: 2 }}>
-                      {[it.category, it.owner && `owner: ${it.owner}`].filter(Boolean).join(" · ")}
+                      {[it.category, it.owner && `owner: ${it.owner}`, it.subitems && it.subitems.length && `${it.subitems.length} sub-items`].filter(Boolean).join(" · ")}
                     </span>
                   )}
                 </span>
@@ -1201,6 +1214,15 @@ function AgendaItem({ item, onClick }) {
           </svg>
         )}
       </div>
+      {item.subitems && item.subitems.length > 0 && (
+        <ul style={{ margin: "7px 0 0", padding: 0, listStyle: "none", display: "grid", gap: 3 }}>
+          {item.subitems.map((s, i) => (
+            <li key={i} style={{ position: "relative", paddingLeft: 15, fontSize: 11, color: "var(--ink-2)", lineHeight: 1.45 }}>
+              <span style={{ position: "absolute", left: 3, top: 0, color: "var(--grey-7)" }}>·</span>{s}
+            </li>
+          ))}
+        </ul>
+      )}
       {item.planned && (item.presenter || item.owner || item.guests || item.goesToEEC) && (
         <div style={{ fontSize: 11, color: "var(--ink-2)", marginTop: 7, lineHeight: 1.5 }}>
           {item.presenter && <div><span style={{ color: "var(--grey-7)" }}>Presenter: </span>{item.presenter}</div>}

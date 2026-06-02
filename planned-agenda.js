@@ -75,25 +75,31 @@
         },
         {
           "n": 2,
-          "title": "Class of 2028 Semester 3 Review\n(Endocrinology, Gastroenterology, GUSRH, MSK, Renal)",
+          "title": "Class of 2028 Semester 3 Review",
           "category": "Voting",
           "owner": "PCCS",
           "presenter": "Staci Leisman, MD (PCCS Admin Co-Chair)",
           "confirmed": null,
           "guests": null,
           "ready": "",
-          "planned": true
+          "planned": true,
+          "subitems": [
+            "(Endocrinology, Gastroenterology, GUSRH, MSK, Renal)"
+          ]
         },
         {
           "n": 3,
-          "title": "Class of 2029 Semester 1 Review\n(Foundations: MCG, Anatomy, FIM, Pathology)",
+          "title": "Class of 2029 Semester 1 Review",
           "category": "Voting",
           "owner": "PCCS",
           "presenter": "Staci Leisman, MD (PCCS Admin Co-Chair)",
           "confirmed": null,
           "guests": null,
           "ready": "",
-          "planned": true
+          "planned": true,
+          "subitems": [
+            "(Foundations: MCG, Anatomy, FIM, Pathology)"
+          ]
         },
         {
           "n": 4,
@@ -115,7 +121,7 @@
           "owner": "EEC",
           "presenter": "Michelle Francis, MD (EEC Co-Chair)",
           "confirmed": "YES",
-          "guests": null,
+          "guests": "N/A",
           "ready": "",
           "planned": true
         },
@@ -126,31 +132,38 @@
           "owner": "EEC",
           "presenter": "Staci Leisman, MD (PCCS Admin Co-Chair)",
           "confirmed": null,
-          "guests": null,
-          "ready": "AY 2026-27 EEC Calendar, Operating Norms & Subcommittee Membership Confirmations",
+          "guests": "None",
+          "ready": "",
           "planned": true
         },
         {
           "n": 3,
           "title": "Review of MD Program Policies - HIGH PRIORITY",
           "category": "Voting",
-          "owner": "EEC",
-          "presenter": "Jacob Shreffler, PhD (AES Admin Co-Chair)",
-          "confirmed": null,
-          "guests": "Kris Alpi",
-          "ready": "",
-          "planned": true
-        },
-        {
-          "n": 4,
-          "title": "Technical Standards Review",
-          "category": "Voting",
           "owner": "Other",
-          "presenter": null,
-          "confirmed": "YES",
-          "guests": "Valerie Parkas, Jacquelyn Chudow, Steve Paik, Christine Low",
+          "presenter": "Other",
+          "confirmed": null,
+          "guests": "Kris Alpi, Val Parkas, Jackie Chudow",
           "ready": "",
-          "planned": true
+          "planned": true,
+          "subitems": [
+            "Advancement/Progression Policy",
+            "Academic Remediation Policy",
+            "Grading Policy",
+            "Grade Appeal Policy",
+            "Technical Standards Policy",
+            "Attendance Policy",
+            "LOA Policy",
+            "Characteristics of Accepted Applicants",
+            "Student Work Hours",
+            "Pre-med requirements",
+            "Timeliness of Grades Policy",
+            "MM/C Feedback Policy",
+            "Narrative Assessment Policy",
+            "Student Eval Completion Policy",
+            "COI in Student Assessment",
+            "Elective Requirements"
+          ]
         }
       ],
       "2026-08-07": [
@@ -178,12 +191,12 @@
         },
         {
           "n": 3,
-          "title": "Review of MD Program Policies - MEDIUM PRIORITY",
+          "title": "Clinical Skills Review: Class of 2028 (POM 1, POM 2, and POM 3)",
           "category": "Voting",
-          "owner": "AES",
-          "presenter": "Jacob Shreffler, PhD (AES Admin Co-Chair)",
+          "owner": "CCS",
+          "presenter": "Chris Strother (Chair, CCWG)",
           "confirmed": null,
-          "guests": "Kris Alpi",
+          "guests": "Horatio Holzer, MD (CCS Admin Co-Chair), Mike Herscher",
           "ready": "",
           "planned": true
         }
@@ -203,9 +216,9 @@
         {
           "n": 2,
           "title": "PEAKS 1 Review",
-          "category": null,
-          "owner": null,
-          "presenter": null,
+          "category": "Voting",
+          "owner": "AES",
+          "presenter": "Jacob Shreffler, PhD (AES Admin Co-Chair)",
           "confirmed": null,
           "guests": null,
           "ready": "",
@@ -213,25 +226,36 @@
         },
         {
           "n": 3,
-          "title": "Clinical Skills Review: Class of 2028 \n(POM 1, POM 2, and POM 3)",
-          "category": null,
-          "owner": "CCS",
-          "presenter": "Chris Strother (Chair, CCWG)",
+          "title": "Review of MD Program Policies - MEDIUM PRIORITY",
+          "category": "Voting",
+          "owner": "Other",
+          "presenter": "Other",
           "confirmed": null,
-          "guests": "Horatio Holzer, MD (CCS Admin Co-Chair), Mike Herscher",
+          "guests": null,
           "ready": "",
-          "planned": true
+          "planned": true,
+          "subitems": [
+            "Clinical Supervision Policy",
+            "RCE Policy",
+            "Mistreatment Policy",
+            "Residents as Teachers Policy",
+            "FERPA",
+            "Student Promotions Committee"
+          ]
         },
         {
           "n": 4,
-          "title": "Class of 2029 Semester 2 Review\n(Neuroscience, Behavioral Science, Hematology, Cardiology, Pulmonary)",
-          "category": null,
+          "title": "Class of 2029 Semester 2 Review",
+          "category": "Voting",
           "owner": "PCCS",
           "presenter": "Staci Leisman, MD (PCCS Admin Co-Chair)",
           "confirmed": null,
           "guests": "Staci Leisman",
           "ready": "",
-          "planned": true
+          "planned": true,
+          "subitems": [
+            "(Neuroscience, Behavioral Science, Hematology, Cardiology, Pulmonary)"
+          ]
         }
       ],
       "2026-10-02": [
@@ -655,6 +679,20 @@
           "presenter": "Module Directors",
           "goesToEEC": null,
           "planned": true
+        },
+        {
+          "n": 3,
+          "title": "Clinical Supervision Policy",
+          "presenter": "???",
+          "goesToEEC": null,
+          "planned": true,
+          "subitems": [
+            "RCE Policy",
+            "Mistreatment Policy",
+            "Residents as Teachers Policy",
+            "FERPA",
+            "Student Promotions Committee"
+          ]
         }
       ],
       "2027-02-11": [
@@ -693,6 +731,20 @@
           "presenter": null,
           "goesToEEC": "2026-09-04",
           "planned": true
+        },
+        {
+          "n": 2,
+          "title": "Clinical Supervision Policy",
+          "presenter": null,
+          "goesToEEC": null,
+          "planned": true,
+          "subitems": [
+            "RCE Policy",
+            "Mistreatment Policy",
+            "Residents as Teachers Policy",
+            "FERPA",
+            "Student Promotions Committee"
+          ]
         }
       ],
       "2026-11-10": [
