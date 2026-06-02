@@ -56,8 +56,8 @@ const COMMITTEE_SCHEDULES = {
     "2025-12-16", "2026-01-06", "2026-01-20", "2026-02-03", "2026-03-17",
     "2026-04-14", "2026-05-19", "2026-06-16",
     // AY 2026–27
-    "2026-07-14", "2026-08-04", "2026-09-08", "2026-10-06", "2026-11-10",
-    "2026-12-15", "2027-01-05", "2027-01-19", "2027-02-02", "2027-03-16",
+    "2026-07-14", "2026-08-11", "2026-09-08", "2026-10-06", "2026-11-10",
+    "2026-12-08", "2027-01-05", "2027-01-19", "2027-02-02", "2027-03-16",
     "2027-04-13", "2027-05-18", "2027-06-15",
   ],
   PCCS: [
@@ -83,6 +83,8 @@ const COMMITTEE_SCHEDULES = {
     // CIS launches mid-2026
     "2026-06-18", "2026-07-16", "2026-08-20", "2026-09-17", "2026-10-15",
     "2026-11-19", "2026-12-17",
+    // AY 2026–27 (from Agenda Tracker — only dates with planned items added so far)
+    "2027-02-11",
   ],
 };
 
@@ -175,17 +177,10 @@ function hasMinutesFile(date) {
 
 window.MOBILE_SCHEDULE = {
   build,
-  // committeeMeetings(id) returns the merged list for a committee, scoped to
-  // the current academic year. Pre-AY meetings still exist in window.EEC but
-  // are hidden from the committee meetings UI.
+  // committeeMeetings(id) returns the merged list for a committee
   committeeMeetings(id) {
     if (!this._cache) this._cache = build();
-    const list = this._cache[id] || [];
-    const R = window.ROSTERS;
-    if (!R) return list;
-    const range = R.AY_RANGES[R.CURRENT_AY];
-    if (!range) return list;
-    return list.filter(e => e.date >= range.start && e.date <= range.end);
+    return this._cache[id] || [];
   },
   nextMeeting(id) {
     const today = new Date();

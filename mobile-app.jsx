@@ -518,9 +518,16 @@ function shortAgenda(item) {
 }
 
 // ─── Meeting/entry helper ─────────────────────────────────────────────────────
+function plannedFor(committee, date) {
+  return (window.PLANNED_AGENDA && window.PLANNED_AGENDA.itemsFor)
+    ? window.PLANNED_AGENDA.itemsFor(committee, date)
+    : [];
+}
+
 function entryToMeeting(entry) {
   if (entry.kind === "filed" && entry.m) return { ...entry.m, scheduled: false };
-  // Synthesize a stub for scheduled-only entries.
+  // Synthesize a stub for scheduled-only entries, attaching any planned agenda.
+  const planned = plannedFor(entry.committee, entry.date);
   return {
     id: `scheduled:${entry.committee}:${entry.date}`,
     date: entry.date,
@@ -529,11 +536,12 @@ function entryToMeeting(entry) {
     time: entry.time || null,
     modality: null,
     presidingOfficer: null,
-    items: [], topics: [],
+    items: planned, topics: [],
     present: [], absent: [], exOfficio: [], guests: [], recused: [],
     attendanceRate: null,
     minutesStatus: "Pending intake",
     scheduled: true,
+    planned: planned.length > 0,
   };
 }
 
@@ -586,9 +594,7 @@ function MobileApp() {
     actions: "Action Items",
     motions: "Motions & Votes",
     members: "Members",
-    membership: "Membership",
     attendance: "Attendance",
-    "take-attendance": "Take attendance",
     reviews: "Curriculum Reviews",
     policies: "Policies",
     linkage: "Linkage Map",
@@ -651,10 +657,7 @@ function MobileApp() {
         {screen === "detail"    && <DetailScreen entry={cur.params.entry} kind={cur.params.kind}
                                                   onItem={(itemKind, params) => push({ screen: "item", params: { kind: itemKind, ...params } })} />}
         {screen === "section"   && <SectionScreen section={cur.params.section}
-                                                  focusMemberId={cur.params.focusMemberId}
-                                                  ay={cur.params.ay}
-                                                  pop={pop}
-                                                  onSection={(name, focusMemberId, extra) => push({ screen: "section", params: { section: name, focusMemberId, ...(extra || {}) } })}
+                                                  onSection={(name) => push({ screen: "section", params: { section: name } })}
                                                   onItem={(kind, id) => push({ screen: "item", params: { kind, id } })} />}
         {screen === "item"      && <ItemScreen kind={cur.params.kind} id={cur.params.id} meetingId={cur.params.meetingId} idx={cur.params.idx} />}
       </div>
@@ -663,7 +666,7 @@ function MobileApp() {
 }
 
 // Section/item dispatchers
-function SectionScreen({ section, onSection, onItem, focusMemberId, ay, pop }) {
+function SectionScreen({ section, onSection, onItem }) {
   const S = window.MobileSections;
   if (!S) return <div className="m-body"><div className="m-empty"><h3>Loading…</h3></div></div>;
   switch (section) {
@@ -671,10 +674,7 @@ function SectionScreen({ section, onSection, onItem, focusMemberId, ay, pop }) {
     case "actions":        return <S.ActionsScreen    onItem={onItem} />;
     case "motions":        return <S.MotionsScreen    onItem={onItem} />;
     case "members":        return <S.MembersScreen    onItem={onItem} />;
-    case "membership":     return <S.MembershipScreen onItem={onItem} onSection={onSection} />;
-    case "attendance":     return <S.AttendanceScreen focusMemberId={focusMemberId} ay={ay}
-                                                       onTake={(currentAy) => onSection("take-attendance", null, { ay: currentAy })} />;
-    case "take-attendance": return <S.LiveAttendanceTracker ay={ay || (window.ROSTERS ? window.ROSTERS.CURRENT_AY : "2025-26")} onDone={pop} />;
+    case "attendance":     return <S.AttendanceScreen />;
     case "reviews":        return <S.ReviewsScreen    onItem={onItem} />;
     case "policies":       return <S.PoliciesScreen   onItem={onItem} />;
     case "linkage":        return <S.LinkageScreen   />;
@@ -719,7 +719,7 @@ function HomeScreen({ onPick, onSection }) {
   // OCA stats (recurring weekly schedule)
   const ocaNext = SCHED.nextMeeting("OCA");
 
-  const tiles = ["EEC", "PCCS", "CCS", "CIS"].map(id => {
+  const tiles = ["EEC", "PCCS", "CCS", "AES"].map(id => {
     const c = window.EEC.committeeById[id];
     return {
       ...c,
@@ -773,7 +773,7 @@ function HomeScreen({ onPick, onSection }) {
       {window.MobileSections && <window.MobileSections.ExploreList onPick={onSection} />}
 
       <div style={{ fontSize: 10.5, color: "var(--grey-7)", textAlign: "center", marginTop: 22, lineHeight: 1.55 }}>
-        16 EEC minutes filed through May 2026. Subcommittee minutes (PCCS · CCS · CIS) and OCA minutes pending intake from each chair.
+        16 EEC minutes filed through May 2026. Subcommittee minutes (PCCS · CCS · AES · CIS) and OCA minutes pending intake from each chair.
       </div>
     </div>
   );
@@ -906,6 +906,8 @@ function MeetingRow({ entry, committee, onPick }) {
   const future = d >= today;
   const isFiled = entry.kind === "filed";
   const m = entry.m; // only present for filed entries
+  const planned = isFiled ? [] : plannedFor(entry.committee, entry.date);
+  const hasPlanned = planned.length > 0;
   const items = isFiled ? (m.items || []).slice(0, 3) : [];
 
   return (
@@ -925,7 +927,7 @@ function MeetingRow({ entry, committee, onPick }) {
               : (entry.session || entry.time || "Scheduled")}
           </span>
           <span className={"status" + (future ? " future" : "")}>
-            {isFiled ? m.minutesStatus : (future ? "Scheduled" : "Pending")}
+            {isFiled ? m.minutesStatus : (hasPlanned ? "Agenda set" : (future ? "Scheduled" : "Pending"))}
           </span>
         </div>
         {isFiled && items.length > 0 ? (
@@ -938,6 +940,13 @@ function MeetingRow({ entry, committee, onPick }) {
         ) : isFiled ? (
           <ul className="agenda">
             {(m.topics || []).slice(0, 3).map((t, i) => <li key={i}>{t}</li>)}
+          </ul>
+        ) : hasPlanned ? (
+          <ul className="agenda">
+            {planned.slice(0, 3).map((it, i) => <li key={i}>{shortAgenda(it)}</li>)}
+            {planned.length > 3 && (
+              <li className="more">+{planned.length - 3} more planned item{planned.length - 3 === 1 ? "" : "s"}</li>
+            )}
           </ul>
         ) : (
           <div style={{
@@ -963,7 +972,7 @@ function MeetingScreen({ entry, onPick }) {
   const hasFile = !m.scheduled && window.MOBILE_SCHEDULE.hasMinutesFile(m.date);
 
   const buttons = [
-    { kind: "summary",     label: "Meeting Summary",          count: m.scheduled ? null : (m.items?.length || 0), sub: m.scheduled ? "not circulated" : "agenda items", color: "var(--brand-violet)", disabled: m.scheduled },
+    { kind: "summary",     label: "Meeting Summary",          count: m.scheduled ? ((m.items?.length || 0) || null) : (m.items?.length || 0), sub: m.scheduled ? ((m.items?.length || 0) ? "planned items" : "not circulated") : "agenda items", color: "var(--brand-violet)", disabled: m.scheduled && !(m.items && m.items.length) },
     { kind: "governance",  label: "Governance Action Plans",   count: m.scheduled ? null : govActions.length, sub: m.scheduled ? "pending" : "plans", color: "var(--brand-cyan)",  disabled: m.scheduled },
     { kind: "operational", label: "Operational Action Plans",  count: m.scheduled ? null : opActions.length,  sub: m.scheduled ? "pending" : "plans", color: "var(--good)",        disabled: m.scheduled },
     { kind: "download",    label: hasFile ? "Download Minutes" : "Minutes Unavailable", count: null, sub: hasFile ? ".docx" : (m.scheduled ? "pending intake" : "not on file"), color: hasFile ? "var(--brand-magenta)" : "var(--grey-5)", disabled: !hasFile },
@@ -986,7 +995,7 @@ function MeetingScreen({ entry, onPick }) {
             display: "flex", alignItems: "center", gap: 8,
           }}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
-            Scheduled — minutes not yet filed
+            {m.planned ? "Scheduled — planned agenda below (minutes not yet filed)" : "Scheduled — minutes not yet filed"}
           </div>
         )}
         <div className="meta-grid">
@@ -1048,6 +1057,38 @@ function MeetingScreen({ entry, onPick }) {
         ))}
       </div>
 
+      {/* Planned agenda preview (scheduled meetings with items from the tracker) */}
+      {m.scheduled && m.items && m.items.length > 0 && (
+        <div style={{ background: "var(--paper)", borderRadius: 12, padding: "12px 14px", marginBottom: 8, boxShadow: "0 1px 2px rgba(20,20,20,0.04), 0 0 0 1px rgba(20,20,20,0.06)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
+            <div style={{ fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: c.deep, fontWeight: 700 }}>
+              Planned agenda
+            </div>
+            <div style={{ fontSize: 10.5, color: "var(--grey-7)", fontFamily: "var(--mono)" }}>
+              {m.items.length} item{m.items.length === 1 ? "" : "s"}
+            </div>
+          </div>
+          <ol style={{ margin: 0, padding: 0, listStyle: "none" }}>
+            {m.items.map((it, i) => (
+              <li key={i} style={{ display: "flex", gap: 9, padding: "7px 0", borderTop: i ? "1px solid var(--grey-1)" : 0, alignItems: "flex-start" }}>
+                <span style={{ flex: "0 0 auto", fontFamily: "var(--mono)", fontSize: 11, color: c.deep, fontWeight: 700, marginTop: 1 }}>{it.n || i + 1}</span>
+                <span style={{ flex: 1, minWidth: 0 }}>
+                  <span style={{ fontSize: 12.5, color: "var(--ink)", lineHeight: 1.35 }}>{it.title}</span>
+                  {(it.category || it.owner) && (
+                    <span style={{ display: "block", fontSize: 10.5, color: "var(--grey-11)", marginTop: 2 }}>
+                      {[it.category, it.owner && `owner: ${it.owner}`].filter(Boolean).join(" · ")}
+                    </span>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ol>
+          <div style={{ fontSize: 10.5, color: "var(--grey-7)", marginTop: 8, fontStyle: "italic" }}>
+            Open <strong style={{ fontStyle: "normal", color: c.deep }}>Meeting Summary</strong> for presenters, guests, and readiness.
+          </div>
+        </div>
+      )}
+
       {/* Topics chips */}
       {m.topics && m.topics.length > 0 && (
         <div style={{ background: "var(--paper)", borderRadius: 12, padding: "12px 14px", marginBottom: 8, boxShadow: "0 1px 2px rgba(20,20,20,0.04), 0 0 0 1px rgba(20,20,20,0.06)" }}>
@@ -1083,16 +1124,29 @@ function DetailScreen({ entry, kind, onItem }) {
 
 function SummaryDetail({ m, c, onItem }) {
   const items = m.items || [];
-  const motions = window.EEC.MOTIONS.filter(v => v.meetingId === m.id);
+  const isPlanned = !!m.scheduled;
+  const motions = isPlanned ? [] : window.EEC.MOTIONS.filter(v => v.meetingId === m.id);
   return (
     <div className="m-body">
       <div className="m-section-head">
         <div className="eyebrow" style={{ color: c.deep }}>{c.short} · {fmtDate(m.date, "medium")}</div>
-        <h2>Meeting Summary</h2>
+        <h2>{isPlanned ? "Planned Agenda" : "Meeting Summary"}</h2>
         <div style={{ fontSize: 12, color: "var(--grey-11)", marginTop: 6, lineHeight: 1.5 }}>
-          {items.length} agenda item{items.length === 1 ? "" : "s"} · {motions.length} motion{motions.length === 1 ? "" : "s"} voted · {m.present?.length || 0} voting members present
+          {isPlanned
+            ? `${items.length} planned agenda item${items.length === 1 ? "" : "s"} · this meeting hasn't occurred yet`
+            : `${items.length} agenda item${items.length === 1 ? "" : "s"} · ${motions.length} motion${motions.length === 1 ? "" : "s"} voted · ${m.present?.length || 0} voting members present`}
         </div>
       </div>
+
+      {isPlanned && (
+        <div style={{
+          padding: "8px 12px", marginBottom: 10, borderRadius: 8,
+          background: "var(--brand-cyan-tint)", color: "var(--brand-cyan-deep)",
+          fontSize: 11, lineHeight: 1.45,
+        }}>
+          Drawn from the Agenda Tracker. Items, presenters, and guests may change before the meeting; minutes are filed afterward.
+        </div>
+      )}
 
       {items.length === 0 && (
         <div className="m-empty">
@@ -1101,7 +1155,11 @@ function SummaryDetail({ m, c, onItem }) {
         </div>
       )}
 
-      {items.map((it, i) => <AgendaItem key={i} item={it} onClick={() => onItem && onItem("agenda-item", { meetingId: m.id, idx: it.idx })} />)}
+      {items.map((it, i) =>
+        isPlanned
+          ? <AgendaItem key={i} item={it} />
+          : <AgendaItem key={i} item={it} onClick={() => onItem && onItem("agenda-item", { meetingId: m.id, idx: it.idx })} />
+      )}
     </div>
   );
 }
@@ -1118,19 +1176,21 @@ function AgendaItem({ item, onClick }) {
   return (
     <button className="m-agenda-item"
             onClick={onClick}
-            disabled={!onClick}
             style={{
               display: "block", textAlign: "left", border: 0,
               width: "100%", cursor: onClick ? "pointer" : "default",
-              fontFamily: "inherit",
+              fontFamily: "inherit", background: "var(--paper)", color: "inherit",
             }}>
       <div className="top">
-        {item.idx && <span className="idx">§{item.idx}</span>}
+        {(item.idx || item.n) && <span className="idx">§{item.idx || item.n}</span>}
         {cat && <span className="cat" style={catStyle}>{cat}</span>}
         {item.lcme && item.lcme.length > 0 && (
           <span style={{ fontSize: 9.5, color: "var(--grey-7)", fontFamily: "var(--mono)", marginLeft: "auto" }}>
             LCME {item.lcme.join(", ")}
           </span>
+        )}
+        {item.planned && /YES/i.test(item.ready || "") && (
+          <span style={{ marginLeft: "auto", fontSize: 9, fontWeight: 700, letterSpacing: "0.08em", color: "#176D3B", background: "var(--good-tint)", padding: "2px 7px", borderRadius: 999 }}>READY</span>
         )}
       </div>
       <div className="title" style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
@@ -1141,6 +1201,14 @@ function AgendaItem({ item, onClick }) {
           </svg>
         )}
       </div>
+      {item.planned && (item.presenter || item.owner || item.guests || item.goesToEEC) && (
+        <div style={{ fontSize: 11, color: "var(--ink-2)", marginTop: 7, lineHeight: 1.5 }}>
+          {item.presenter && <div><span style={{ color: "var(--grey-7)" }}>Presenter: </span>{item.presenter}</div>}
+          {item.owner && <div><span style={{ color: "var(--grey-7)" }}>Subcommittee owner: </span>{item.owner}</div>}
+          {item.guests && <div><span style={{ color: "var(--grey-7)" }}>Guests: </span>{item.guests}</div>}
+          {item.goesToEEC && <div><span style={{ color: "var(--grey-7)" }}>Feeds EEC: </span>{fmtDate(item.goesToEEC, "medium")}</div>}
+        </div>
+      )}
       {item.outcome && (
         <div className="outcome" style={{
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
