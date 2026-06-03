@@ -865,8 +865,22 @@ function CommitteeScreen({ committeeId, onPick }) {
     const target = body.querySelector(`[data-month="${key}"]`);
     if (!target) return;
     const stripH = stripRef.current ? stripRef.current.offsetHeight : 0;
-    const top = target.offsetTop - body.offsetTop - stripH - 6;
-    body.scrollTo({ top: Math.max(0, top), behavior: smooth ? "smooth" : "auto" });
+    // Measure relative to the scroll container itself (robust even though .m-body
+    // is not the offsetParent — its only positioned ancestor is .m-screen).
+    const delta = target.getBoundingClientRect().top - body.getBoundingClientRect().top;
+    const dest = Math.max(0, body.scrollTop + delta - stripH - 6);
+    if (Math.abs(dest - body.scrollTop) < 1) { body.scrollTop = dest; return; }
+    if (!smooth) { body.scrollTop = dest; return; }
+    // Manual rAF easing: native scrollTo({behavior:"smooth"}) is unreliable on
+    // mobile webviews when the container uses -webkit-overflow-scrolling: touch,
+    // which is why only the (instant) mount-anchor month appeared to work.
+    const start = body.scrollTop, dist = dest - start, dur = 340, t0 = performance.now();
+    (function step(now) {
+      const p = Math.min(1, (now - t0) / dur);
+      const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2; // easeInOutQuad
+      body.scrollTop = start + dist * e;
+      if (p < 1) requestAnimationFrame(step);
+    })(t0);
   }
 
   // Open scrolled to the anchor month.
@@ -876,10 +890,13 @@ function CommitteeScreen({ committeeId, onPick }) {
   }, [committeeId, grouped.length]);
 
   // Keep the active chip centered in the strip as it changes.
+  // Scroll the strip horizontally only — scrollIntoView would walk up and could
+  // scroll .m-body vertically, fighting the month scroll above.
   useEffectMA(() => {
-    if (!stripRef.current || !activeMonth) return;
-    const chip = stripRef.current.querySelector(`[data-chip="${activeMonth}"]`);
-    if (chip) chip.scrollIntoView({ inline: "center", block: "nearest" });
+    const strip = stripRef.current;
+    if (!strip || !activeMonth) return;
+    const chip = strip.querySelector(`[data-chip="${activeMonth}"]`);
+    if (chip) strip.scrollTo({ left: Math.max(0, chip.offsetLeft - (strip.clientWidth - chip.offsetWidth) / 2), behavior: "smooth" });
   }, [activeMonth]);
 
   // Scroll-spy: highlight the month currently sitting at the top of the list.
