@@ -50,10 +50,20 @@
 .d-rest-head { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey-11); font-weight: 600; margin: 4px 0 10px; }
 .d-month-strip {
   position: sticky; top: 56px; z-index: 20;
-  display: flex; flex-wrap: wrap; gap: 6px;
+  display: flex; flex-direction: column; gap: 6px;
   padding: 8px 0 10px; margin: 0 0 6px;
   background: var(--grey-1); border-bottom: 1px solid var(--grey-2);
 }
+.d-ay-band {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  padding: 6px 10px; border-radius: 10px;
+}
+.d-ay-band .ay-lbl {
+  font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700;
+  color: var(--grey-11); margin-right: 2px; white-space: nowrap;
+}
+.d-ay-band.ay-a { background: rgba(34,31,114,0.06); border: 1px solid rgba(34,31,114,0.12); }
+.d-ay-band.ay-b { background: rgba(0,174,239,0.07); border: 1px solid rgba(0,174,239,0.16); }
 .d-month-chip {
   flex: 0 0 auto; padding: 4px 11px;
   border-radius: 999px; border: 1px solid var(--grey-3);
@@ -735,6 +745,19 @@
       return order.map((k) => ({ key: k, items: map.get(k) }));
     }, [rest]);
     const stripMonths = monthGroups.map((g) => g.key);
+    // Split the strip into academic-year bands (Jul–Jun), oldest AY first.
+    const ayBands = (() => {
+      const byAy = new Map();
+      stripMonths.forEach((k) => {
+        const [y, mo] = k.split("-").map(Number);
+        const ayStart = mo >= 7 ? y : y - 1;
+        if (!byAy.has(ayStart)) byAy.set(ayStart, []);
+        byAy.get(ayStart).push(k);
+      });
+      return [...byAy.entries()].sort((a, b) => a[0] - b[0]).map(([ayStart, months]) => ({
+        ayStart, label: `AY ${ayStart}–${String(ayStart + 1).slice(-2)}`, months: months.sort(),
+      }));
+    })();
     const [activeMonth, setActiveMonth] = useState(null);
     const stripRef = useRef(null);
     const TOPBAR_H = 56; // .topbar height in styles.css
@@ -792,16 +815,21 @@
                 <div className="d-rest-head">All meetings · {rest.length}</div>
                 {stripMonths.length > 1 && (
                   <div className="d-month-strip" ref={stripRef}>
-                    {stripMonths.map((key) => {
-                      const md = D(key + "-01");
-                      const isActive = key === activeMonth;
-                      return (
-                        <button key={key} className={"d-month-chip" + (isActive ? " active" : "")} onClick={() => scrollToMonth(key)}>
-                          {md.toLocaleDateString("en-US", { month: "short" })}
-                          <span className="yr">'{String(md.getFullYear()).slice(-2)}</span>
-                        </button>
-                      );
-                    })}
+                    {ayBands.map((band, bi) => (
+                      <div key={band.ayStart} className={"d-ay-band " + (bi % 2 === 0 ? "ay-a" : "ay-b")}>
+                        <span className="ay-lbl">{band.label}</span>
+                        {band.months.map((key) => {
+                          const md = D(key + "-01");
+                          const isActive = key === activeMonth;
+                          return (
+                            <button key={key} className={"d-month-chip" + (isActive ? " active" : "")} onClick={() => scrollToMonth(key)}>
+                              {md.toLocaleDateString("en-US", { month: "short" })}
+                              <span className="yr">'{String(md.getFullYear()).slice(-2)}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ))}
                   </div>
                 )}
                 <div className="card" style={{ padding: 0, overflow: "hidden" }}>
