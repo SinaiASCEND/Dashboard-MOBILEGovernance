@@ -431,10 +431,10 @@ function OverviewScreen({ onSection, onItem }) {
   const openActions = A.filter(a => a.status !== "Completed").length;
   const motionsApproved = V.filter(v => v.result === "Approved").length;
 
-  const pastMeetings = M.filter(m => m.minutesStatus !== "Scheduled");
-  const attData = pastMeetings.filter(m => m.attendanceRate != null);
-  const avgAtt = attData.length === 0 ? 0 :
-    Math.round(100 * attData.reduce((s, m) => s + m.attendanceRate, 0) / attData.length);
+  const eecAtt = window.EEC.committeeAttendance("EEC");
+  const attMtgCount = eecAtt.meetings.length;
+  const avgAtt = eecAtt.overall != null ? Math.round(100 * eecAtt.overall) : 0;
+  const eecC = window.EEC.committeeById["EEC"];
 
   const statusCounts = { "Not Started": 0, "In Progress": 0, "Completed": 0, "Deferred": 0 };
   for (const a of A) {
@@ -482,8 +482,8 @@ function OverviewScreen({ onSection, onItem }) {
         </div>
         <div className="m-kpi" style={{ borderTopColor: "var(--brand-magenta-deep)" }}>
           <div className="lbl">Avg attendance</div>
-          <div className="val">{avgAtt}%</div>
-          <div className="sub">{attData.length} mtgs · quorum 8 of 19</div>
+          <div className="val">{attMtgCount ? avgAtt + "%" : "—"}</div>
+          <div className="sub">EEC · {attMtgCount} mtg{attMtgCount === 1 ? "" : "s"} · quorum {eecC.quorum} of {eecC.votingSeats}</div>
         </div>
       </div>
 
@@ -1047,8 +1047,11 @@ function MembersScreen({ onItem }) {
         )}
         {filtered.map(m => {
           const seats = m.seats || [];
-          const total = m.presentCount + m.absentCount;
-          const rate = total > 0 ? Math.round(100 * m.presentCount / total) : null;
+          // Attendance scoped to the committees actually shown: when a single
+          // committee is selected, show that committee's rate; on "All", show the
+          // member's rate across the committees they sit on. (No EEC-only rollup.)
+          const att = window.EEC.memberAttendance(m.id, committee);
+          const rate = att.total > 0 ? Math.round(100 * att.rate) : null;
           return (
             <button key={m.id} className="m-row" onClick={() => onItem("member", m.id)}
                     style={{ gridTemplateColumns: "auto 1fr auto" }}>
@@ -1078,9 +1081,14 @@ function MembersScreen({ onItem }) {
 function MemberDetail({ id }) {
   const m = window.EEC.memberById[id];
   if (!m) return <div className="m-body"><div className="m-empty"><h3>Not found</h3></div></div>;
-  const total = m.presentCount + m.absentCount;
-  const rate = total > 0 ? Math.round(100 * m.presentCount / total) : null;
   const seats = m.seats || [];
+  // Committees this member sits on, with attendance computed per committee plus an overall.
+  const comms = window.EEC.committeesOf(id);
+  const overall = window.EEC.memberAttendance(id, "ALL");
+  const rate = overall.total > 0 ? Math.round(100 * overall.rate) : null;
+  const perCommittee = comms
+    .map(cid => ({ cid, c: window.EEC.committeeById[cid], att: window.EEC.memberAttendance(id, cid) }))
+    .filter(x => x.c);
 
   return (
     <div className="m-body">
@@ -1103,7 +1111,7 @@ function MemberDetail({ id }) {
 
       {rate != null && (
         <div className="m-card">
-          <div className="head"><h3>Attendance</h3></div>
+          <div className="head"><h3>Attendance · since {fmtD(window.EEC.ATTENDANCE_START, "medium")}</h3></div>
           <div style={{ padding: 14 }}>
             <div className="m-attbar" style={{ marginBottom: 8 }}>
               <div className="track">
@@ -1115,8 +1123,28 @@ function MemberDetail({ id }) {
               <div className="pct">{rate}%</div>
             </div>
             <div style={{ fontSize: 12, color: "var(--grey-11)" }}>
-              <strong style={{ color: "var(--ink)" }}>{m.presentCount}</strong> present · <strong style={{ color: "var(--ink)" }}>{m.absentCount}</strong> absent · {total} tracked
+              <strong style={{ color: "var(--ink)" }}>{overall.present}</strong> present · <strong style={{ color: "var(--ink)" }}>{overall.absent}</strong> absent · {overall.total} meeting{overall.total === 1 ? "" : "s"} across {perCommittee.length} committee{perCommittee.length === 1 ? "" : "s"}
             </div>
+            {perCommittee.length > 1 && (
+              <div style={{ marginTop: 12, display: "grid", gap: 8 }}>
+                {perCommittee.map(({ cid, att }) => (
+                  <div key={cid} style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", gap: 8, alignItems: "center" }}>
+                    <CChip id={cid} />
+                    <div className="m-attbar" style={{ margin: 0 }}>
+                      <div className="track">
+                        <div className="fill" style={{
+                          width: (att.total ? Math.round(100 * att.rate) : 0) + "%",
+                          background: att.total ? (att.rate >= 0.75 ? "var(--good)" : att.rate >= 0.6 ? "var(--warn)" : "var(--bad)") : "var(--grey-2)",
+                        }}></div>
+                      </div>
+                    </div>
+                    <span style={{ fontFamily: "var(--mono)", fontSize: 10.5, color: "var(--grey-11)", flex: "0 0 auto" }}>
+                      {att.total ? `${att.present}/${att.total}` : "—"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -1156,90 +1184,130 @@ function MemberDetail({ id }) {
 
 // ─── SECTION SCREEN: Attendance ───────────────────────────────────────────
 function AttendanceScreen() {
-  const M = window.EEC.MEETINGS.filter(m => m.attendanceRate != null)
-    .sort((a, b) => window.MS_DATE.parseLocal(b.date) - window.MS_DATE.parseLocal(a.date));
+  const [scope, setScope] = useStateMS("ALL");
+  const scopes = useMemoMS(() => window.EEC.attendanceScopes(), []);
+  const bundle = useMemoMS(() => window.EEC.committeeAttendance(scope), [scope]);
 
-  const avg = M.length === 0 ? 0 :
-    Math.round(100 * M.reduce((s, m) => s + m.attendanceRate, 0) / M.length);
+  const meetings = [...bundle.meetings].sort(
+    (a, b) => window.MS_DATE.parseLocal(b.date) - window.MS_DATE.parseLocal(a.date));
+  const avg = bundle.overall != null ? Math.round(100 * bundle.overall) : 0;
 
-  const tracked = window.EEC.MEMBERS.filter(m => m.tracked && (m.presentCount + m.absentCount) > 0)
-    .map(m => {
-      const total = m.presentCount + m.absentCount;
-      return { ...m, total, rate: Math.round(100 * m.presentCount / total) };
-    })
-    .sort((a, b) => b.rate - a.rate);
+  const byMember = bundle.rows
+    .filter(r => r.total > 0)
+    .map(r => ({ ...r, pct: Math.round(100 * r.rate) }))
+    .sort((a, b) => b.pct - a.pct);
+
+  const c = scope !== "ALL" ? window.EEC.committeeById[scope] : null;
+  const quorumLine = c
+    ? `Quorum is ${c.quorum} of ${c.votingSeats} voting seats.`
+    : "Across the EEC and its four subcommittees.";
+  const startLabel = fmtD(window.EEC.ATTENDANCE_START, "medium");
 
   return (
     <div className="m-body">
       <div className="m-section-head">
-        <div className="eyebrow">EEC · AY 2025–26</div>
+        <div className="eyebrow">{c ? c.short : "All committees"} · since {startLabel}</div>
         <h2>Attendance</h2>
         <div style={{ fontSize: 12, color: "var(--grey-11)", marginTop: 6, lineHeight: 1.45 }}>
-          Voting attendance for filed EEC meetings. Quorum is 8 of 19 voting members.
+          Counting fresh from {startLabel}. {quorumLine}
         </div>
+      </div>
+
+      <div className="m-chiprow">
+        {scopes.map(s => {
+          const sc = s.id !== "ALL" ? window.EEC.committeeById[s.id] : null;
+          const active = scope === s.id;
+          return (
+            <button key={s.id}
+                    className={"m-chip" + (active ? " active" : "")}
+                    onClick={() => setScope(s.id)}
+                    style={active && sc ? { background: sc.deep, borderColor: sc.deep } : null}>
+              {s.label}{s.meetings === 0 ? " · 0" : ""}
+            </button>
+          );
+        })}
       </div>
 
       <div className="m-kpi-grid">
         <div className="m-kpi" style={{ borderTopColor: "var(--brand-cyan-deep)" }}>
           <div className="lbl">Average</div>
-          <div className="val">{avg}%</div>
-          <div className="sub">across {M.length} filed mtgs</div>
+          <div className="val">{meetings.length ? avg + "%" : "—"}</div>
+          <div className="sub">across {meetings.length} filed mtg{meetings.length === 1 ? "" : "s"}</div>
         </div>
         <div className="m-kpi" style={{ borderTopColor: "var(--brand-violet)" }}>
-          <div className="lbl">Tracked members</div>
-          <div className="val">{tracked.length}</div>
-          <div className="sub">with attendance on record</div>
+          <div className="lbl">Members</div>
+          <div className="val">{bundle.members.length}</div>
+          <div className="sub">{c ? "on " + c.short : "tracked"}</div>
         </div>
       </div>
 
-      <div className="m-card">
-        <div className="head"><h3>By meeting</h3></div>
-        {M.map(m => (
-          <div key={m.id} style={{ padding: "11px 14px", borderBottom: "1px solid var(--grey-2)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-              <div style={{ fontSize: 12.5, color: "var(--ink-2)", fontWeight: 500 }}>{fmtD(m.date, "medium")}</div>
-              <div style={{ fontSize: 11, color: "var(--grey-11)", fontFamily: "var(--mono)" }}>
-                <strong style={{ color: "var(--ink)" }}>{m.present.length}</strong> / {m.present.length + m.absent.length}
-              </div>
-            </div>
-            <div className="m-attbar">
-              <div className="track">
-                <div className="fill" style={{
-                  width: (m.attendanceRate * 100) + "%",
-                  background: m.attendanceRate >= 0.75 ? "var(--good)" :
-                              m.attendanceRate >= 0.6  ? "var(--warn)" : "var(--bad)",
-                }}></div>
-              </div>
-              <div className="pct">{Math.round(m.attendanceRate * 100)}%</div>
-            </div>
+      {meetings.length === 0 && (
+        <div className="m-card">
+          <div className="m-empty" style={{ padding: 26 }}>
+            <h3>No meetings on file yet</h3>
+            <p>{c ? `${c.short} minutes filed from ${startLabel} onward will appear here.` : `Filed minutes from ${startLabel} onward will appear here.`}</p>
           </div>
-        ))}
-      </div>
+        </div>
+      )}
 
-      <div className="m-card">
-        <div className="head"><h3>By member</h3></div>
-        {tracked.slice(0, 30).map(m => (
-          <div key={m.id} style={{ padding: "10px 14px", borderBottom: "1px solid var(--grey-2)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
-              <div style={{ fontSize: 12, color: "var(--ink-2)", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, marginRight: 8 }}>
-                {shortName(m.name)}
+      {meetings.length > 0 && (
+        <div className="m-card">
+          <div className="head"><h3>By meeting</h3></div>
+          {meetings.map(m => {
+            const r = bundle.rateByMeeting[m.id];
+            const cc = window.EEC.committeeById[m.committee];
+            return (
+              <div key={m.id} style={{ padding: "11px 14px", borderBottom: "1px solid var(--grey-2)" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
+                  <div style={{ fontSize: 12.5, color: "var(--ink-2)", fontWeight: 500, display: "flex", gap: 8, alignItems: "center" }}>
+                    {scope === "ALL" && cc && <CChip id={m.committee} />}
+                    {fmtD(m.date, "medium")}
+                  </div>
+                  <div style={{ fontSize: 11, color: "var(--grey-11)", fontFamily: "var(--mono)" }}>
+                    <strong style={{ color: "var(--ink)" }}>{m.present.length}</strong> / {m.present.length + m.absent.length}
+                  </div>
+                </div>
+                <div className="m-attbar">
+                  <div className="track">
+                    <div className="fill" style={{
+                      width: ((r || 0) * 100) + "%",
+                      background: r >= 0.75 ? "var(--good)" : r >= 0.6 ? "var(--warn)" : "var(--bad)",
+                    }}></div>
+                  </div>
+                  <div className="pct">{r != null ? Math.round(r * 100) : "—"}%</div>
+                </div>
               </div>
-              <div style={{ fontSize: 10.5, color: "var(--grey-11)", fontFamily: "var(--mono)", flex: "0 0 auto" }}>
-                {m.presentCount}/{m.total}
+            );
+          })}
+        </div>
+      )}
+
+      {byMember.length > 0 && (
+        <div className="m-card">
+          <div className="head"><h3>By member</h3></div>
+          {byMember.slice(0, 40).map(r => (
+            <div key={r.member.id} style={{ padding: "10px 14px", borderBottom: "1px solid var(--grey-2)" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 5 }}>
+                <div style={{ fontSize: 12, color: "var(--ink-2)", fontWeight: 500, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1, marginRight: 8 }}>
+                  {shortName(r.member.name)}
+                </div>
+                <div style={{ fontSize: 10.5, color: "var(--grey-11)", fontFamily: "var(--mono)", flex: "0 0 auto" }}>
+                  {r.present}/{r.total}
+                </div>
+              </div>
+              <div className="m-attbar">
+                <div className="track">
+                  <div className="fill" style={{
+                    width: r.pct + "%",
+                    background: r.pct >= 75 ? "var(--good)" : r.pct >= 60 ? "var(--warn)" : "var(--bad)",
+                  }}></div>
+                </div>
+                <div className="pct">{r.pct}%</div>
               </div>
             </div>
-            <div className="m-attbar">
-              <div className="track">
-                <div className="fill" style={{
-                  width: m.rate + "%",
-                  background: m.rate >= 75 ? "var(--good)" : m.rate >= 60 ? "var(--warn)" : "var(--bad)",
-                }}></div>
-              </div>
-              <div className="pct">{m.rate}%</div>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -1340,16 +1408,16 @@ function ReviewDetail({ id }) {
 
 // ─── SECTION SCREEN: Policies ─────────────────────────────────────────────
 function PoliciesScreen({ onItem }) {
-  const P = window.EEC.POLICIES.filter(p => p.kind === "policy");
+  const P = window.EEC.POLICIES;
   const sorted = [...P].sort((a, b) =>
     window.MS_DATE.parseLocal(b.effectiveDate) - window.MS_DATE.parseLocal(a.effectiveDate));
   return (
     <div className="m-body">
       <div className="m-section-head">
-        <div className="eyebrow">Policies</div>
+        <div className="eyebrow">Policies &amp; Bylaws</div>
         <h2>Policies</h2>
         <div style={{ fontSize: 12, color: "var(--grey-11)", marginTop: 6, lineHeight: 1.45 }}>
-          Authoritative policy documents adopted by the EEC.
+          Authoritative policy documents adopted by the EEC, including the bylaws.
         </div>
       </div>
 
@@ -1460,7 +1528,7 @@ function LinkageScreen() {
   }
   for (const a of window.EEC.ACTIONS) (a.lcme || []).forEach(e => bump(e, "actions"));
   for (const v of window.EEC.MOTIONS) (v.lcme || []).forEach(e => bump(e, "motions"));
-  for (const p of window.EEC.POLICIES) { if (p.kind === "policy") (p.lcme || []).forEach(e => bump(e, "policies")); }
+  for (const p of window.EEC.POLICIES) (p.lcme || []).forEach(e => bump(e, "policies"));
 
   // Sort by total count desc
   const rows = [...map.entries()]
@@ -1752,37 +1820,10 @@ function AgendaItemDetail({ meetingId, idx }) {
         </div>
       </div>
 
-      {/* Summary of Presentation */}
-      {groups.presentation.length > 0 && (
-        <div className="m-card">
-          <div className="head"><h3>Summary of presentation</h3></div>
-          <ParaBlock paras={groups.presentation.flatMap(s => s.body)} />
-        </div>
-      )}
-
-      {/* Discussion points */}
-      {discussionParas.length > 0 && (
-        <div className="m-card">
-          <div className="head"><h3>Discussion points</h3></div>
-          <ParaBlock paras={discussionParas} />
-        </div>
-      )}
-
-      {/* Issues raised (extracted) */}
-      {split.issues.length > 0 && (
-        <div className="m-card">
-          <div className="head"><h3>Issues raised</h3></div>
-          <BulletBlock items={split.issues} />
-        </div>
-      )}
-
-      {/* Questions asked / answered (extracted) */}
-      {split.questions.length > 0 && (
-        <div className="m-card">
-          <div className="head"><h3>Questions asked &amp; answered</h3></div>
-          <BulletBlock items={split.questions} />
-        </div>
-      )}
+      {/* PUBLIC-FACING VIEW — Summary of Presentation, Member Discussion,
+         Issues Raised, and Questions Asked/Answered are intentionally NOT
+         rendered here. The discussion summary shows only Outcome, Additional
+         context, and Presenter. */}
 
       {/* Outcome (from enriched if present, else from base item) */}
       {(groups.outcome.length > 0 || item.outcome) && (
@@ -1828,20 +1869,6 @@ function AgendaItemDetail({ meetingId, idx }) {
           <div className="m-prose" style={{ padding: 14 }}><p>{item.presenter}</p></div>
         </div>
       )}
-
-      <div className="m-card">
-        <div className="head"><h3>Meeting context</h3></div>
-        <div style={{ padding: 14 }}>
-          <div className="m-kv">
-            <div className="k">Committee</div><div className="v">{c.name}</div>
-            <div className="k">Date</div><div className="v">{fmtD(m.date, "long")}</div>
-            {m.type && <><div className="k">Session</div><div className="v">{m.type}</div></>}
-            {m.presidingOfficer && (
-              <><div className="k">Presiding</div><div className="v">{m.presidingOfficer.split(/[,(]/)[0].trim()}</div></>
-            )}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

@@ -279,14 +279,19 @@
     grey3: "#DEDFE2", grey7: "#8A8B8E", grey11: "#58595B", ink: "#141414", paper: "#FFFFFF",
   };
 
-  // (1) EEC attendance trend — area + line with a dashed quorum threshold.
-  function AttendanceTrend({ height = 190, compact = false }) {
+  // (1) Attendance trend — area + line with a dashed quorum threshold.
+  // Scoped to ATTENDANCE_START via meetingsForCommittee; committee defaults to EEC.
+  function AttendanceTrend({ height = 190, compact = false, committee = "EEC" }) {
     const e = E();
-    const c = e.committeeById["EEC"] || { quorum: 8, votingSeats: 19 };
-    const pts = e.MEETINGS.filter(isFiled).sort((a, b) => a.date.localeCompare(b.date))
+    const c = e.committeeById[committee] || { quorum: 7, votingSeats: 13, short: committee };
+    const pts = (e.meetingsForCommittee ? e.meetingsForCommittee(committee) : e.MEETINGS.filter(isFiled))
       .filter((m) => m.attendanceRate != null)
       .map((m) => ({ date: m.date, v: Math.round(m.attendanceRate * 100) }));
-    if (!pts.length) return null;
+    if (!pts.length) return (
+      <div className="d-chart" style={{ display: "grid", placeItems: "center", minHeight: compact ? 80 : 160, color: "var(--grey-7)", fontSize: 12 }}>
+        No meetings on file since {fmt(e.ATTENDANCE_START, "mdy")}.
+      </div>
+    );
     const quorum = Math.round((c.quorum / c.votingSeats) * 100);
     const W = 660, H = height, padL = compact ? 4 : 32, padR = compact ? 4 : 56, padT = 10, padB = compact ? 6 : 24;
     const iw = W - padL - padR, ih = H - padT - padB, n = pts.length;
@@ -297,7 +302,7 @@
     const below = pts.filter((p) => p.v < quorum).length;
     return (
       <div className="d-chart">
-        <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="EEC attendance by meeting">
+        <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${c.short} attendance by meeting`}>
           <defs><linearGradient id="dAtt" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor={PAL.cyan} stopOpacity="0.20" /><stop offset="100%" stopColor={PAL.cyan} stopOpacity="0.02" />
           </linearGradient></defs>
@@ -322,7 +327,7 @@
             </text>
           ) : null))}
         </svg>
-        {!compact && <div className="d-chartnote"><b>{below}</b> of {pts.length} meetings fell below quorum ({quorum}%); attendance has held at <b>100%</b> since the November faculty-development session.</div>}
+        {!compact && <div className="d-chartnote"><b>{pts.length}</b> meeting{pts.length === 1 ? "" : "s"} on record since {fmt(e.ATTENDANCE_START, "mdy")}{below > 0 ? <> · <b>{below}</b> below quorum ({quorum}%)</> : <> · all at or above quorum ({quorum}%)</>}.</div>}
       </div>
     );
   }
@@ -842,7 +847,7 @@
     const e = E();
     const [trackedOnly, setTrackedOnly] = useState(false);
     const rows = useMemo(() => {
-      let ms = e.MEMBERS.filter((m) => (m.seats && m.seats.length) || (m.presentCount + m.absentCount) > 0);
+      let ms = e.MEMBERS.filter((m) => (m.seats && m.seats.length));
       if (committee !== "ALL") ms = ms.filter((m) => (m.seats || []).some((s) => s.committee === committee));
       if (trackedOnly) ms = ms.filter((m) => m.tracked);
       return ms.sort((a, b) => {
@@ -852,10 +857,11 @@
         return a.name.localeCompare(b.name);
       });
     }, [committee, trackedOnly]);
+    const attLabel = committee === "ALL" ? "Attendance" : `${cmt(committee).short} attendance`;
 
     return (
       <>
-        <div className="d-head"><h1>Members</h1><div className="lede">Seat holders across all governance bodies. Voting status, committee seats, and EEC attendance. Open a member for their full seat record.</div></div>
+        <div className="d-head"><h1>Members</h1><div className="lede">AY 2026–27 (v2.0) seat holders across all governance bodies. Voting status, committee seats, and attendance for the committees shown — counted fresh from {fmt(e.ATTENDANCE_START, "mdy")}. Open a member for their full seat record.</div></div>
         <CommitteeFilter value={committee} onChange={setCommittee} />
         <div className="d-toolbar">
           <label className="chk"><input type="checkbox" checked={trackedOnly} onChange={(ev) => setTrackedOnly(ev.target.checked)} /> Attendance-tracked only</label>
@@ -864,13 +870,14 @@
         </div>
         <div className="card" style={{ padding: 0, overflow: "hidden" }}>
           <table className="tbl">
-            <thead><tr><th style={{ paddingLeft: 16 }}>Name</th><th>Role</th><th>Seats</th><th>Voting</th><th>EEC attendance</th></tr></thead>
+            <thead><tr><th style={{ paddingLeft: 16 }}>Name</th><th>Role</th><th>Seats</th><th>Voting</th><th>{attLabel}</th></tr></thead>
             <tbody>
               {rows.map((m) => {
                 const seatCmts = [...new Set((m.seats || []).map((s) => s.committee))];
                 const votes = (m.seats || []).some((s) => s.vote);
-                const tot = m.presentCount + m.absentCount;
-                const pct = tot ? Math.round((m.presentCount / tot) * 100) : null;
+                const att = e.memberAttendance(m.id, committee);
+                const tot = att.total;
+                const pct = tot ? Math.round(att.rate * 100) : null;
                 return (
                   <tr key={m.id} className="row-link" onClick={() => onSelect({ type: "member", id: m.id })}>
                     <td style={{ paddingLeft: 16 }}><strong style={{ fontWeight: 600 }}>{m.name}</strong></td>
@@ -881,7 +888,7 @@
                       {tot ? (
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                           <div className="bar-track" style={{ flex: 1 }}><div className="bar-fill good" style={{ width: pct + "%" }} /></div>
-                          <span className="t-mono" style={{ fontSize: 11, color: "var(--grey-11)", minWidth: 64, textAlign: "right" }}>{m.presentCount}/{tot} · {pct}%</span>
+                          <span className="t-mono" style={{ fontSize: 11, color: "var(--grey-11)", minWidth: 64, textAlign: "right" }}>{att.present}/{tot} · {pct}%</span>
                         </div>
                       ) : <span className="sub">No record</span>}
                     </td>
@@ -899,15 +906,17 @@
     const e = E();
     const m = e.memberById[id];
     if (!m) return null;
-    const tot = m.presentCount + m.absentCount;
-    const pct = tot ? Math.round((m.presentCount / tot) * 100) : null;
+    const comms = e.committeesOf(id);
+    const overall = e.memberAttendance(id, "ALL");
+    const tot = overall.total;
+    const pct = tot ? Math.round(overall.rate * 100) : null;
     const dual = (m.seats || []).length > 1;
     return (
       <Drawer eyebrow={m.tracked ? "Attendance-tracked member" : "Member"} title={m.name} onClose={onClose}>
         <div className="d-kv">
           <span className="k">Role</span><span className="v">{m.role || "—"}</span>
           {m.email && <><span className="k">Email</span><span className="v">{m.email}</span></>}
-          {tot > 0 && <><span className="k">EEC attendance</span><span className="v">{m.presentCount} present · {m.absentCount} absent ({pct}%)</span></>}
+          {tot > 0 && <><span className="k">Attendance</span><span className="v">{overall.present} present · {overall.absent} absent ({pct}%) since {fmt(e.ATTENDANCE_START, "mdy")}</span></>}
         </div>
 
         <div className="d-block">
@@ -924,12 +933,28 @@
 
         {tot > 0 && (
           <div className="d-block">
-            <h4>Attendance record</h4>
-            <div className="d-kv" style={{ gridTemplateColumns: "90px 1fr" }}>
+            <h4>Attendance by committee — since {fmt(e.ATTENDANCE_START, "mdy")}</h4>
+            <div className="d-kv" style={{ gridTemplateColumns: "120px 1fr" }}>
+              {comms.map((cid) => {
+                const a = e.memberAttendance(id, cid);
+                if (!a.total) return null;
+                const cp = Math.round(a.rate * 100);
+                return (
+                  <React.Fragment key={cid}>
+                    <span className="k"><span className="d-chip" style={{ borderColor: cmt(cid).color, color: cmt(cid).deep }}>{cmt(cid).short}</span></span>
+                    <span className="v" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <div className="bar-track" style={{ flex: 1, maxWidth: 160 }}><div className="bar-fill good" style={{ width: cp + "%" }} /></div>
+                      <span className="t-mono" style={{ fontSize: 11, color: "var(--grey-11)" }}>{a.present}/{a.total} · {cp}%</span>
+                    </span>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+            <div style={{ marginTop: 12 }} className="d-kv">
               <span className="k" style={{ color: "var(--good)" }}>Present</span>
-              <span className="v"><div className="d-chips">{(m.meetingsPresent || []).map((d) => <span key={d} className="d-chip" style={{ background: "var(--good-tint)", borderColor: "var(--good-tint)", color: "var(--good)" }}>{fmt(d, "md")}</span>)}</div></span>
+              <span className="v"><div className="d-chips">{overall.records.filter((r) => r.status === "present").map((r) => <span key={r.meetingId} className="d-chip" style={{ background: "var(--good-tint)", borderColor: "var(--good-tint)", color: "var(--good)" }}>{cmt(r.committee).short} {fmt(r.date, "md")}</span>)}</div></span>
               <span className="k" style={{ color: "var(--bad)" }}>Absent</span>
-              <span className="v">{(m.meetingsAbsent || []).length ? <div className="d-chips">{m.meetingsAbsent.map((d) => <span key={d} className="d-chip" style={{ background: "var(--bad-tint)", borderColor: "var(--bad-tint)", color: "var(--bad)" }}>{fmt(d, "md")}</span>)}</div> : <span className="sub">None</span>}</span>
+              <span className="v">{overall.records.some((r) => r.status === "absent") ? <div className="d-chips">{overall.records.filter((r) => r.status === "absent").map((r) => <span key={r.meetingId} className="d-chip" style={{ background: "var(--bad-tint)", borderColor: "var(--bad-tint)", color: "var(--bad)" }}>{cmt(r.committee).short} {fmt(r.date, "md")}</span>)}</div> : <span className="sub">None</span>}</span>
             </div>
           </div>
         )}
@@ -937,60 +962,73 @@
     );
   }
 
-  // ════════════════ ATTENDANCE (EEC heatmap) ════════════════
+  // ════════════════ ATTENDANCE (committee-scoped heatmap) ════════════════
   function Attendance({ onSelect }) {
     const e = E();
-    const meetings = useMemo(() => e.MEETINGS.filter(isFiled).sort((a, b) => a.date.localeCompare(b.date)), []);
-    const members = useMemo(() => e.MEMBERS.filter((m) => (m.presentCount + m.absentCount) > 0)
-      .map((m) => ({ ...m, _pct: m.presentCount / (m.presentCount + m.absentCount) }))
-      .sort((a, b) => b._pct - a._pct || a.name.localeCompare(b.name)), []);
+    const [scope, setScope] = useState("EEC");
+    const bundle = useMemo(() => e.committeeAttendance(scope), [scope]);
+    const meetings = useMemo(() => [...bundle.meetings].sort((a, b) => a.date.localeCompare(b.date)), [bundle]);
+    const members = useMemo(() => bundle.rows
+      .filter((r) => r.total > 0)
+      .map((r) => ({ ...r.member, _pct: r.rate, _att: r }))
+      .sort((a, b) => b._pct - a._pct || a.name.localeCompare(b.name)), [bundle]);
+    const c = scope !== "ALL" ? e.committeeById[scope] : null;
+    const scopeLabel = c ? c.short : "all committees";
 
     return (
       <>
-        <div className="d-head"><h1>Attendance</h1><div className="lede">EEC attendance matrix across {meetings.length} meetings with filed minutes. Each member's voting attendance is plotted by meeting; click a name for their full record.</div></div>
-        <div className="card" style={{ marginBottom: 18 }}>
-          <div className="card-header"><span className="card-title">Attendance rate by meeting</span><span className="card-meta">% of voting members present</span></div>
-          <AttendanceTrend height={210} />
-        </div>
-        <div className="d-heatwrap">
-          <table className="d-heat">
-            <thead>
-              <tr>
-                <th className="namecol">Member ({members.length})</th>
-                {meetings.map((m) => <th key={m.id} className="dcol" title={fmt(m.date, "long")}>{D(m.date).toLocaleDateString("en-US", { month: "numeric", day: "numeric" })}</th>)}
-                <th className="dcol pctcol" style={{ position: "sticky", right: 0, background: "var(--paper)" }}>%</th>
-              </tr>
-            </thead>
-            <tbody>
-              {members.map((m) => {
-                const pres = new Set(m.meetingsPresent || []);
-                const abs = new Set(m.meetingsAbsent || []);
-                const tot = m.presentCount + m.absentCount;
-                const pct = Math.round((m.presentCount / tot) * 100);
-                return (
-                  <tr key={m.id}>
-                    <td className="namecol" style={{ cursor: "pointer" }} onClick={() => onSelect({ type: "member", id: m.id })}>
-                      <div style={{ fontSize: 12, fontWeight: 600 }}>{m.name}</div>
-                      <div className="sub" style={{ fontSize: 10.5 }}>{(m.role || "").slice(0, 42)}</div>
-                    </td>
-                    {meetings.map((mt) => {
-                      const st = pres.has(mt.date) ? "p" : abs.has(mt.date) ? "a" : "-";
-                      const bg = st === "p" ? "var(--good)" : st === "a" ? "var(--bad-tint)" : "var(--grey-1)";
-                      const bd = st === "a" ? "1px solid var(--bad)" : "none";
-                      return <td key={mt.id} className="cell"><div className="box" style={{ background: st === "p" ? bg : (st === "a" ? "var(--bad-tint)" : "var(--grey-1)"), border: bd, opacity: st === "-" ? 0.5 : 1 }} /></td>;
-                    })}
-                    <td className="pctcol" style={{ position: "sticky", right: 0, background: "var(--paper)", color: pct >= 70 ? "var(--good)" : pct >= 40 ? "var(--warn)" : "var(--bad)" }}>{pct}</td>
+        <div className="d-head"><h1>Attendance</h1><div className="lede">Voting attendance for {scopeLabel}, counted fresh from {fmt(e.ATTENDANCE_START, "mdy")}. Toggle a committee below; click a member for their full record.</div></div>
+        <CommitteeFilter value={scope} onChange={setScope} />
+        {meetings.length === 0 ? (
+          <div className="card" style={{ padding: 40, textAlign: "center", color: "var(--grey-7)" }}>
+            No filed minutes for {scopeLabel} since {fmt(e.ATTENDANCE_START, "mdy")}. Attendance will populate here once minutes are filed.
+          </div>
+        ) : (
+          <>
+            <div className="card" style={{ marginBottom: 18 }}>
+              <div className="card-header"><span className="card-title">{scopeLabel === "all committees" ? "Attendance rate by meeting" : c.short + " attendance rate by meeting"}</span><span className="card-meta">% of voting members present</span></div>
+              <AttendanceTrend height={210} committee={scope} />
+            </div>
+            <div className="d-heatwrap">
+              <table className="d-heat">
+                <thead>
+                  <tr>
+                    <th className="namecol">Member ({members.length})</th>
+                    {meetings.map((m) => <th key={m.id} className="dcol" title={`${cmt(m.committee).short} · ${fmt(m.date, "long")}`}>{D(m.date).toLocaleDateString("en-US", { month: "numeric", day: "numeric" })}</th>)}
+                    <th className="dcol pctcol" style={{ position: "sticky", right: 0, background: "var(--paper)" }}>%</th>
                   </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-        <div className="d-legend">
-          <span className="it"><span className="sw" style={{ background: "var(--good)" }} /> Present</span>
-          <span className="it"><span className="sw" style={{ background: "var(--bad-tint)", border: "1px solid var(--bad)" }} /> Absent</span>
-          <span className="it"><span className="sw" style={{ background: "var(--grey-1)", opacity: 0.6 }} /> Not on roster / no record</span>
-        </div>
+                </thead>
+                <tbody>
+                  {members.map((m) => {
+                    const pres = new Set();
+                    const abs = new Set();
+                    for (const r of m._att.records) (r.status === "present" ? pres : abs).add(r.meetingId);
+                    const pct = Math.round(m._pct * 100);
+                    return (
+                      <tr key={m.id}>
+                        <td className="namecol" style={{ cursor: "pointer" }} onClick={() => onSelect({ type: "member", id: m.id })}>
+                          <div style={{ fontSize: 12, fontWeight: 600 }}>{m.name}</div>
+                          <div className="sub" style={{ fontSize: 10.5 }}>{(m.role || "").slice(0, 42)}</div>
+                        </td>
+                        {meetings.map((mt) => {
+                          const st = pres.has(mt.id) ? "p" : abs.has(mt.id) ? "a" : "-";
+                          const bd = st === "a" ? "1px solid var(--bad)" : "none";
+                          return <td key={mt.id} className="cell"><div className="box" style={{ background: st === "p" ? "var(--good)" : (st === "a" ? "var(--bad-tint)" : "var(--grey-1)"), border: bd, opacity: st === "-" ? 0.5 : 1 }} /></td>;
+                        })}
+                        <td className="pctcol" style={{ position: "sticky", right: 0, background: "var(--paper)", color: pct >= 70 ? "var(--good)" : pct >= 40 ? "var(--warn)" : "var(--bad)" }}>{pct}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div className="d-legend">
+              <span className="it"><span className="sw" style={{ background: "var(--good)" }} /> Present</span>
+              <span className="it"><span className="sw" style={{ background: "var(--bad-tint)", border: "1px solid var(--bad)" }} /> Absent</span>
+              <span className="it"><span className="sw" style={{ background: "var(--grey-1)", opacity: 0.6 }} /> Not on roster / no record</span>
+            </div>
+          </>
+        )}
       </>
     );
   }
