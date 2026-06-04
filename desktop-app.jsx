@@ -712,8 +712,8 @@
     const gov = md ? md.actions.filter((a) => a.kind === "governance") : [];
     const ops = md ? md.actions.filter((a) => a.kind === "operational") : [];
     const motions = e.MOTIONS.filter((v) => v.meetingId === id);
-    const hasFile = isFiled(m) && window.MOBILE_SCHEDULE.hasMinutesFile && window.MOBILE_SCHEDULE.hasMinutesFile(m.committee, m.date);
-    const fileName = `${(c.short || m.committee || "EEC").replace(/[^A-Za-z0-9]/g, "")}_Minutes_${m.date}.docx`;
+    const hasFile = isFiled(m) && window.MOBILE_SCHEDULE.hasMinutesFile && window.MOBILE_SCHEDULE.hasMinutesFile(m.date);
+    const fileName = `EEC_Minutes_${m.date}.docx`;
 
     return (
       <Drawer eyebrow={`${c.short} · ${m.type.replace("Regular Scheduled Meeting", "Regular Meeting")}`} title={fmt(m.date, "long")} onClose={onClose}>
