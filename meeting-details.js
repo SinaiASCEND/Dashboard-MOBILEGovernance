@@ -4,6 +4,288 @@
 //   actions: [{ description, responsible, target, followUp, lcme[], kind }]  — Section 7 "Summary of Action Items"
 // kind = "governance" | "operational" (heuristic classification)
 window.MEETING_DETAILS = {
+  "mtg-eec-20260605": {
+    "items": [
+      {
+        "idx": "6.1",
+        "title": "Approval of Minutes — EEC Meeting of May 22, 2026",
+        "sections": [
+          {
+            "heading": null,
+            "body": [
+              "Category: [VOTING ITEM]",
+              "Moved by Dr. Vannita Simma-Chiang; seconded by Dr. Kyunghyun Lee.",
+              "LCME Element: 8.1 — Curricular Management"
+            ]
+          },
+          {
+            "heading": "Disposition",
+            "body": [
+              "Dr. Francis presented the minutes of the May 22, 2026 EEC meeting and invited corrections or revisions; none were raised.",
+              "Outcome: Motion carried — minutes of May 22, 2026 approved."
+            ]
+          }
+        ]
+      },
+      {
+        "idx": "6.2",
+        "title": "THINQ Module — End-of-Year Review (Class of 2028) and AY 2026–2027 Improvement Plan",
+        "sections": [
+          {
+            "heading": null,
+            "body": [
+              "Category: [VOTING ITEM]",
+              "Presenter: Ravi Ramaswamy, MD (Co-Chair, Curricular Integration Subcommittee; THINQ Module Director)",
+              "LCME Elements: 6.3 — Self-Directed and Life-Long Learning; 7.4 — Critical Judgment/Scientific Inquiry; 8.3 — Curricular Design, Review, Revision/Improvement; 8.4 — Program Evaluation; 9.4 — Assessment System Design"
+            ]
+          },
+          {
+            "heading": "Module Overview",
+            "body": [
+              "THINQ is the longitudinal inquiry and scholarship thread of the ASCEND Phase 1 curriculum — a new module with no Legacy equivalent, launched for the first cohort in July 2024. The reviewed iteration spanned three semesters (August 2024 – December 2025).",
+              "The module meets approximately monthly for half-day Tuesday sessions: five in semester one, five in semester two, and three in semester three (thirteen total). About half is devoted to deep dives within the four Areas of Concentration (AOCs), with evidence-based medicine (EBM) — a subdomain of the Scientific and Scholarly Discovery AOC — identified as essential preparation for the clerkships.",
+              "Assessment is multimodal: EBM Knowledge Quiz (25%), EBM Application Exercise (45%), and AOC Reflections (30%), with a 65% pass cutoff."
+            ]
+          },
+          {
+            "heading": "Outcomes and Student Experience Data",
+            "body": [
+              "Module evaluation items rose steadily from semester one to three, including a 36-percentage-point increase in the high-educational-impact item; by semester three all but that item rose well above 90%. AOC selective satisfaction improved markedly after a feedback-driven redesign making the selectives more application-based.",
+              "Summative performance was strong: 100% passed, with an average and median total score of 90%; the knowledge quiz and EBM application exercise averaged near 90%. AOC Reflection performance declined modestly across semesters (95% → 90% → 87%).",
+              "Two caveats were flagged: end-of-module response rates fell across semesters (65% → 43% → 25%), and two summative ratings fell below the 80% benchmark — usefulness for Step 1 preparation (73%) and the high-educational-impact item."
+            ]
+          },
+          {
+            "heading": "Proposed Action Plan (Endorsed by CIS)",
+            "body": [
+              "Step 1 alignment — integrate 3–5 AMBOSS questions per EBM session; target Step 1 prep rating above 80% and educational-impact above 80%.",
+              "Clinical relevance and integration — align EBM articles with concurrent organ-system modules; owned by Dr. Maaike van Gerwen (SSD AOC Director) and Dr. Bess Storch (EBM Content Area Director).",
+              "AOC reflection quality — investigate the decline, recalibrate the rubric, and monitor with a target above 90%."
+            ]
+          },
+          {
+            "heading": "Member Discussion",
+            "body": [
+              "Alan Zhang (Phase 2 student) commended the AOC selective redesign. Dr. Kyunghyun Lee asked whether the low response rate reflected a collection problem or weak student opinion; Dr. Ramaswamy attributed it to the longitudinal, lower-frequency structure and noted OAE had been asked to send evaluations to the full class in semester three.",
+              "Dr. Jacob Shreffler framed response rates as a program-wide issue, reporting OAE is reviewing rates across modules and clerkships, will prioritize module/clerkship evaluations over lecture/small-group ones, and will bring an evaluations policy to an upcoming EEC meeting. Dr. Soriano explained the rating-scale shift (5-point to 4-point Likert to reduce central tendency) affected THINQ's three-semester span. Dr. Tonia Kim asked whether lower semester-three reflection scores related to new selectives, new graders, or Step 1 proximity — noted as plausible hypotheses."
+            ]
+          },
+          {
+            "heading": "Vote",
+            "body": [
+              "Motion: to approve the THINQ AY 2025–2026 redesign as a completed CQI process and to approve the proposed AY 2026–2027 Improvement Plan. Moved by Dr. Sreekala Raghavan; seconded by Dr. Tonia Kim.",
+              "In favor: 14 (confirmed by electronic poll). Opposed: none. Abstentions: none.",
+              "Outcome: Motion carried — approved with no conditions; CIS-endorsed action plan to be implemented for AY 2026–2027 and tracked through the standard 12-month closed-loop CQI follow-up."
+            ]
+          }
+        ]
+      },
+      {
+        "idx": "6.3",
+        "title": "Legacy Phase 2 — Year 3 Comprehensive Transitional Clerkship Year Review (AY 2025–2026, Class of 2027)",
+        "sections": [
+          {
+            "heading": null,
+            "body": [
+              "Category: [VOTING ITEM]",
+              "Presenter: Teddy Holzer, MD (Chair, Clinical Curriculum Subcommittee)",
+              "LCME Elements: 8.3 — Curricular Design, Review, Revision/Improvement; 8.4 — Program Evaluation; 8.7 — Comparability of Education/Assessment; 9.4 — Assessment System Design; 9.7 — Formative Assessment and Feedback"
+            ]
+          },
+          {
+            "heading": "Background and Methodology",
+            "body": [
+              "The review covered the transitional clerkship year for AY 2025–2026 (Class of 2027 — the final Legacy cohort before the ASCEND Phase 2 launch). To avoid overlapping two curricula, Year 3 clerkships were condensed to run July–February, with elective time shifted to the end within a 19-week transitions block.",
+              "Several clerkships were shortened: Pediatrics and OB-GYN from five to four weeks; Inpatient Medicine from six to five; Surgery-Anesthesiology from eight to five. Neurology and Psychiatry remained four weeks.",
+              "The central question was whether outcomes were non-inferior to predecessors. Cognitive outcomes used a pooled NBME shelf analysis against the prior three years (non-inferiority margin: 3 points on the median). Surgery-Anesthesiology moved to an NBME Customized Assessment Services (CAS) exam, benchmarked against national norms. Program-evaluation Likert/Yes-No items used a 0.3-Likert-point margin."
+            ]
+          },
+          {
+            "heading": "Findings",
+            "body": [
+              "All six clerkships were non-inferior on cognitive learning by shelf exams, and 87 of 88 program-evaluation items met the non-inferiority margin. The four 4-week clerkships trended toward improved medians, possibly reflecting a flexible post-clerkship shelf-prep week.",
+              "Medicine shelf scores were non-inferior overall, but a sub-analysis showed a widened lower tail (more students scoring below 65, still passing), suggesting the six-to-five-week move affected lower-margin students. The single Likert item below threshold was didactic teaching in Psychiatry (structure unchanged); the hypothesis was that streamlined didactics elsewhere made it stand out. An early less-favorable signal on faculty professionalism and supervision was noted at the Elmhurst site.",
+              "There were no work-hour violations. Mid-clerkship feedback met the CQI threshold in every clerkship except Surgery-Anesthesiology, which had already begun in-person delivery in ASCEND Rotation 2. Direct-observation rates were affected by removal of the standardized-patient direct observation during the transitional year. On the Surgery NBME CAS exam, performance reverted toward the national mean — strong on diagnosis-related but below average on management-related questions, which the team will monitor."
+            ]
+          },
+          {
+            "heading": "Proposed Action Items (Endorsed by CCS)",
+            "body": [
+              "Task CCS with bringing direct-observation rates to 100% across all clerkships.",
+              "Bring Surgery-Anesthesiology mid-clerkship feedback delivery rates above 90%.",
+              "Hold focused conversations with the Elmhurst site regarding the possible dip in professionalism and supervision data.",
+              "Continue to evaluate the Surgery NBME CAS exam, pending Step 2 performance data.",
+              "Continue to monitor the Inpatient Medicine clerkship as it returns from five to six weeks in ASCEND."
+            ]
+          },
+          {
+            "heading": "Member Discussion",
+            "body": [
+              "Jamie Frost (Legacy student representative) noted some classmates initially felt rushed for the shelf — particularly those planning away rotations — but found the experience workable and the data sound. Dr. Brian Rice asked whether struggling medicine-shelf students clustered by site; Dr. Holzer reported no site-level signal and an increase in students delaying the shelf, partly built into the flex design.",
+              "Dr. Soriano added that a de-identified quartile analysis showed the students who struggled with the shortened Inpatient Medicine clerkship were those who had consistently struggled across clerkships, and that the return to a six-week medicine clerkship in ASCEND is expected to restore support; results were comparable to published non-inferiority findings at peer institutions. Dr. Holzer noted published studies had not reported increased stress, with shelf preparation the primary stressor in focus groups."
+            ]
+          },
+          {
+            "heading": "Vote",
+            "body": [
+              "Motion: to approve the Legacy Comprehensive Transitional Clerkship Year Review as presented. Moved by Dr. Eve Merrill; seconded by Dr. Brian Rice.",
+              "In favor: 15 (confirmed by electronic poll). Opposed: none. Abstentions: none.",
+              "Outcome: Motion carried — approved; CCS action items carried forward and tracked through the standard 12-month closed-loop CQI follow-up, with early ASCEND data monitored as it accrues."
+            ]
+          }
+        ]
+      },
+      {
+        "idx": "6.4",
+        "title": "OAE-Led Standardized ASCEND Module and Clerkship Curricular Review Process",
+        "sections": [
+          {
+            "heading": null,
+            "body": [
+              "Category: [DEFERRED]",
+              "Presenter: Jacob Shreffler, PhD (Senior Associate Dean for Assessment, Evaluation, and Accreditation)",
+              "LCME Elements: 8.3 — Curricular Design, Review, Revision/Improvement; 8.4 — Program Evaluation"
+            ]
+          },
+          {
+            "heading": "Disposition",
+            "body": [
+              "Listed as a voting item but not presented. In the interest of time the Chair deferred it; Dr. Shreffler will present the OAE-led standardized ASCEND module and clerkship curricular review process at the next EEC meeting. Related response-rate context is captured in Item 6.2's Member Discussion.",
+              "Outcome: Deferred — scheduled for presentation and vote at the June 26, 2026 EEC meeting."
+            ]
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "description": "THINQ — Step 1 alignment: integrate 3–5 AMBOSS questions into each THINQ EBM session and incorporate AMBOSS resources aligned with the session topic. Target: Step 1 preparation rating above 80%; maintain educational-impact rating above 80%.",
+        "responsible": "R. Ramaswamy, MD; Curricular Integration Subcommittee",
+        "target": "AY 2026–2027",
+        "followUp": "12-month closed-loop review at the corresponding EEC meeting in AY 2026–2027.",
+        "lcme": [
+          "6.3",
+          "8.4",
+          "9.4"
+        ],
+        "kind": "governance"
+      },
+      {
+        "description": "THINQ — clinical relevance and integration: align EBM articles with concurrent organ-system modules (e.g., pulmonary, cardiology, renal) through collaboration with Phase 1 module directors.",
+        "responsible": "M. van Gerwen, MD (SSD AOC Director); B. Storch, MD (EBM Content Area Director)",
+        "target": "AY 2026–2027",
+        "followUp": "12-month closed-loop review.",
+        "lcme": [
+          "8.3",
+          "8.4"
+        ],
+        "kind": "governance"
+      },
+      {
+        "description": "THINQ — AOC reflection quality: investigate the multi-semester decline in AOC Reflection scores (95% → 90% → 87%), recalibrate the grading rubric, and monitor scores. Target: maintain above 90%.",
+        "responsible": "R. Ramaswamy, MD; Curricular Integration Subcommittee",
+        "target": "AY 2026–2027",
+        "followUp": "12-month closed-loop review.",
+        "lcme": [
+          "9.4"
+        ],
+        "kind": "governance"
+      },
+      {
+        "description": "Bring direct-observation rates to 100% across all clerkships; monitor early ASCEND data following reinsertion of direct observations.",
+        "responsible": "T. Holzer, MD; Clinical Curriculum Subcommittee",
+        "target": "AY 2026–2027",
+        "followUp": "12-month closed-loop review.",
+        "lcme": [
+          "9.4",
+          "9.7"
+        ],
+        "kind": "governance"
+      },
+      {
+        "description": "Bring Surgery-Anesthesiology mid-clerkship feedback delivery rates above 90%; evaluate the effect of in-person delivery initiated in ASCEND Rotation 2.",
+        "responsible": "T. Holzer, MD; Clinical Curriculum Subcommittee",
+        "target": "AY 2026–2027",
+        "followUp": "12-month closed-loop review.",
+        "lcme": [
+          "9.7"
+        ],
+        "kind": "governance"
+      },
+      {
+        "description": "Hold focused conversations with the Elmhurst site regarding the possible dip in faculty professionalism and supervision data; monitor for comparability across instructional sites.",
+        "responsible": "T. Holzer, MD; Clinical Curriculum Subcommittee",
+        "target": "AY 2026–2027",
+        "followUp": "12-month closed-loop review.",
+        "lcme": [
+          "8.7"
+        ],
+        "kind": "governance"
+      },
+      {
+        "description": "Continue to evaluate the use of the Surgery NBME Customized Assessment Services (CAS) exam, including any effect on subsequent Step 2 performance.",
+        "responsible": "T. Holzer, MD; Clinical Curriculum Subcommittee",
+        "target": "Ongoing; monitor with Step 2 data",
+        "followUp": "Reported as Step 2 data accrue.",
+        "lcme": [
+          "9.4"
+        ],
+        "kind": "governance"
+      },
+      {
+        "description": "Monitor the medicine clerkship as it returns from five to six weeks in ASCEND to determine whether the lower-tail shelf-performance signal resolves.",
+        "responsible": "T. Holzer, MD; Clinical Curriculum Subcommittee",
+        "target": "AY 2026–2027",
+        "followUp": "12-month closed-loop review.",
+        "lcme": [
+          "8.4",
+          "9.4"
+        ],
+        "kind": "governance"
+      },
+      {
+        "description": "Circulate draft minutes of the June 5, 2026 meeting and accept corrections within five business days of receipt.",
+        "responsible": "R. Soriano, MD; Office of Curricular Affairs",
+        "target": "Within 5 business days",
+        "followUp": "Corrections incorporated prior to the next meeting.",
+        "lcme": [
+          "8.1"
+        ],
+        "kind": "operational"
+      },
+      {
+        "description": "Schedule Dr. Shreffler's presentation and vote on the OAE-led standardized ASCEND module and clerkship curricular review process for the next EEC meeting.",
+        "responsible": "R. Soriano, MD; J. Shreffler, PhD",
+        "target": "June 26, 2026",
+        "followUp": "June 26, 2026 EEC meeting — present and vote.",
+        "lcme": [
+          "8.3",
+          "8.4"
+        ],
+        "kind": "operational"
+      },
+      {
+        "description": "OAE to bring a policy addressing evaluation volume and response rates (prioritizing module/clerkship evaluations) to an upcoming EEC meeting.",
+        "responsible": "J. Shreffler, PhD",
+        "target": "Upcoming EEC meeting",
+        "followUp": "Reviewed when presented.",
+        "lcme": [
+          "8.4"
+        ],
+        "kind": "operational"
+      },
+      {
+        "description": "Communicate the new monthly 90-minute EEC meeting schedule effective July 2026 and the expectation that members remain for the full duration to maintain quorum.",
+        "responsible": "M. Francis, MD; R. Soriano, MD",
+        "target": "July 2026",
+        "followUp": "Confirmed at the first monthly meeting.",
+        "lcme": [
+          "8.1"
+        ],
+        "kind": "operational"
+      }
+    ]
+  },
   "mtg-eec-20250711": {
     "items": [
       {

@@ -30,21 +30,11 @@ window.MS_DATE = { parseLocal, ymdLocal };
 
 // Set of minutes-file dates actually present on disk under minutes/EEC_Minutes_<date>.docx.
 // Update if more files are added.
-// OPTIONAL override set. You normally do NOT need to touch this: a meeting's
-// minutes link turns on automatically once its record in eec-data.js is marked
-// "Approved" (see hasMinutesFile / approvedMeetingExists below). Use this set
-// only to force a link on for a date that has no Approved meeting record.
-// Keyed "COMMITTEE|YYYY-MM-DD". Filenames are <COMMITTEE>_Minutes_<date>.docx.
 const MINUTES_AVAILABLE = new Set([
-  "EEC|2025-07-11", "EEC|2025-08-22", "EEC|2025-09-05", "EEC|2025-09-19", "EEC|2025-10-03",
-  "EEC|2025-10-17", "EEC|2025-11-07", "EEC|2025-11-21", "EEC|2025-12-05", "EEC|2025-12-19",
-  "EEC|2026-01-09", "EEC|2026-01-23", "EEC|2026-02-06", "EEC|2026-02-20", "EEC|2026-03-06",
-  "EEC|2026-05-08", "EEC|2026-05-22",
-
-  // PCCS — add entries as PCCS minutes are filed
-  // CCS  — add entries as CCS minutes are filed
-  // CIS  — add entries as CIS minutes are filed
-  // AES  — add entries as AES minutes are filed
+  "2025-07-11", "2025-08-22", "2025-09-05", "2025-09-19", "2025-10-03",
+  "2025-10-17", "2025-11-07", "2025-11-21", "2025-12-05", "2025-12-19",
+  "2026-01-09", "2026-01-23", "2026-02-06", "2026-02-20", "2026-03-06",
+  "2026-05-08", "2026-06-05",
 ]);
 
 const COMMITTEE_SCHEDULES = {
@@ -65,11 +55,9 @@ const COMMITTEE_SCHEDULES = {
     "2025-07-08", "2025-08-05", "2025-09-09", "2025-10-07", "2025-11-11",
     "2025-12-16", "2026-01-06", "2026-01-20", "2026-02-03", "2026-03-17",
     "2026-04-14", "2026-05-19", "2026-06-16",
-    // AY 2026–27 — reconciled to MASTER_Agenda_Tracker "Dates" sheet (2026-05-18).
-    // Corrected: Aug 04→11, Dec 15→08, and the two Jan stubs (05/19) replaced by
-    // the single confirmed Jan 12 meeting.
-    "2026-07-14", "2026-08-11", "2026-09-08", "2026-10-06", "2026-11-10",
-    "2026-12-08", "2027-01-12", "2027-02-02", "2027-03-16",
+    // AY 2026–27
+    "2026-07-14", "2026-08-04", "2026-09-08", "2026-10-06", "2026-11-10",
+    "2026-12-15", "2027-01-05", "2027-01-19", "2027-02-02", "2027-03-16",
     "2027-04-13", "2027-05-18", "2027-06-15",
   ],
   PCCS: [
@@ -90,18 +78,11 @@ const COMMITTEE_SCHEDULES = {
     // AY 2026–27
     "2026-07-21", "2026-08-18", "2026-09-15", "2026-10-20", "2026-11-17",
     "2026-12-15",
-    // AY 2026–27 (Jan–Jun 2027): tracker lists these as month-only placeholders
-    // (no firm day), keyed to the 1st. Re-key once finalized.
-    "2027-01-01", "2027-02-01", "2027-03-01", "2027-04-01", "2027-05-01",
-    "2027-06-01",
   ],
   CIS: [
     // CIS launches mid-2026
     "2026-06-18", "2026-07-16", "2026-08-20", "2026-09-17", "2026-10-15",
     "2026-11-19", "2026-12-17",
-    // AY 2026–27 (Jan–Jun 2027) — added from the "Dates" sheet.
-    "2027-01-21", "2027-02-11", "2027-03-18", "2027-04-15", "2027-05-20",
-    "2027-06-17",
   ],
 };
 
@@ -188,29 +169,8 @@ function build() {
   return byCommittee;
 }
 
-// True when eec-data.js has a filed (Approved) meeting record for this
-// committee + date. This is what lets the registry below be optional: once a
-// meeting is marked "Approved", its minutes link turns on automatically.
-function approvedMeetingExists(committee, date) {
-  try {
-    const M = (window.EEC && window.EEC.MEETINGS) || [];
-    return M.some(m => m.committee === committee && m.date === date
-      && /approved|filed/i.test(m.minutesStatus || ""));
-  } catch (e) { return false; }
-}
-
-function hasMinutesFile(committee, date) {
-  // Preferred: hasMinutesFile(committee, date) — checks the exact committee + date.
-  // A date is "available" if the meeting record is Approved OR it's listed in the
-  // explicit MINUTES_AVAILABLE override set below.
-  if (date !== undefined) {
-    return approvedMeetingExists(committee, date) || MINUTES_AVAILABLE.has(committee + "|" + date);
-  }
-  // Back-compat: hasMinutesFile(date) — true if ANY committee filed minutes that date.
-  const d = committee;
-  for (const key of MINUTES_AVAILABLE) { if (key.endsWith("|" + d)) return true; }
-  const M = (window.EEC && window.EEC.MEETINGS) || [];
-  return M.some(m => m.date === d && /approved|filed/i.test(m.minutesStatus || ""));
+function hasMinutesFile(date) {
+  return MINUTES_AVAILABLE.has(date);
 }
 
 window.MOBILE_SCHEDULE = {
