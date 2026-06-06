@@ -408,14 +408,15 @@ function ExploreList({ onPick }) {
     { kind: "review-full",   label: "Full Curriculum Review", sub: "AY 2023–24 · integrated longitudinal report", bg: "var(--brand-violet)", badge: null },
     { kind: "reviews-phase", label: "Phase Reviews",          sub: "Phase 1 (Pre-Clerkship) · Phase 2 (Clerkship)",   bg: "var(--brand-cyan)",   badge: phaseCount },
     { kind: "action-plans",  label: "Action Plans",            sub: "LCME closed-loop tracker items",                  bg: "var(--brand-magenta)", badge: trackerCount },
+    { kind: "bylaws",        label: "Bylaws & Charters",       sub: "EEC bylaws & subcommittee charters",              bg: "var(--brand-violet)",  badge: null, href: "bylaws.html", glyph: "§" },
   ];
 
   return (
     <div className="m-explore-list" style={{ marginTop: 18 }}>
       <div className="m-meet-month" style={{ padding: "0 4px 6px" }}>Explore</div>
       {items.map(it => (
-        <button key={it.kind} className="m-explore-row" onClick={() => onPick(it.kind)}>
-          <span className="ic" style={{ background: it.bg }}><SectionIcon name={it.kind} /></span>
+        <button key={it.kind} className="m-explore-row" onClick={() => it.href ? window.open(it.href, "_blank", "noopener") : onPick(it.kind)}>
+          <span className="ic" style={{ background: it.bg }}>{it.glyph ? <span style={{ color: "#fff", fontFamily: "var(--serif)", fontWeight: 700, fontSize: 15 }}>{it.glyph}</span> : <SectionIcon name={it.kind} />}</span>
           <span style={{ minWidth: 0 }}>
             <div className="ttl">{it.label}</div>
             <div className="sub">{it.sub}</div>
