@@ -176,6 +176,12 @@ const MOBILE_CSS = `
   font-size: 10.5px; letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--grey-11); font-weight: 600;
   padding: 16px 4px 8px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--grey-1);
+  box-shadow: 0 5px 8px -7px rgba(20,20,20,0.18);
 }
 .m-meet-row {
   background: var(--paper); border-radius: 12px;
@@ -760,18 +766,6 @@ function HomeScreen({ onPick, onSection }) {
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 14 }}>
         {tiles.map(t => <CommitteeTile key={t.id} c={t} onPick={onPick} />)}
       </div>
-
-      {/* Bylaws & Charters */}
-      <button
-        onClick={() => window.open("bylaws.html", "_blank", "noopener")}
-        style={{ width: "100%", marginTop: 12, display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", borderRadius: 14, border: "1px solid var(--grey-3)", borderLeft: "5px solid var(--brand-violet)", background: "var(--paper)", textAlign: "left", cursor: "pointer" }}>
-        <span style={{ flex: "0 0 38px", height: 38, borderRadius: 10, display: "grid", placeItems: "center", background: "var(--brand-violet-tint)", color: "var(--brand-violet)", fontWeight: 700, fontSize: 16, fontFamily: "var(--serif)" }}>§</span>
-        <span style={{ flex: 1, minWidth: 0 }}>
-          <span style={{ display: "block", fontSize: 14.5, fontWeight: 600, color: "var(--ink)" }}>Bylaws &amp; Charters</span>
-          <span style={{ display: "block", fontSize: 11.5, color: "var(--grey-7)", marginTop: 1 }}>EEC bylaws &amp; subcommittee charters · view or download</span>
-        </span>
-        <Chev size={13} />
-      </button>
 
       {/* Explore the rest of the desktop dashboard from here */}
       {window.MobileSections && <window.MobileSections.ExploreList onPick={onSection} />}
