@@ -398,8 +398,10 @@
           {doms.map(([d, cts]) => (
             <div className="hb" key={d}>
               <span className="lbl">{d}</span>
-              <span className="track" style={{ width: Math.max(8, (cts.total / max) * 100) + "%", flex: "none" }}>
-                {SEG.map(([k, c]) => (cts[k] ? <span key={k} className="seg" style={{ width: (cts[k] / cts.total) * 100 + "%", background: c }} title={`${k}: ${cts[k]}`} /> : null))}
+              <span className="track">
+                <span className="bar" style={{ width: Math.max(2, (cts.total / max) * 100) + "%", height: "100%", display: "flex" }}>
+                  {SEG.map(([k, c]) => (cts[k] ? <span key={k} className="seg" style={{ width: (cts[k] / cts.total) * 100 + "%", background: c }} title={`${k}: ${cts[k]}`} /> : null))}
+                </span>
               </span>
               <span className="n">{cts.total}</span>
             </div>
