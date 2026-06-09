@@ -524,9 +524,26 @@ function shortAgenda(item) {
 }
 
 // ─── Meeting/entry helper ─────────────────────────────────────────────────────
+// Planned agenda lookup (forward-looking agendas from planned-agenda.js).
+// Returns [] gracefully if planned-agenda.js isn't loaded.
+function plannedFor(committee, date) {
+  return (window.PLANNED_AGENDA && window.PLANNED_AGENDA.itemsFor)
+    ? (window.PLANNED_AGENDA.itemsFor(committee, date) || [])
+    : [];
+}
+
 function entryToMeeting(entry) {
-  if (entry.kind === "filed" && entry.m) return { ...entry.m, scheduled: false };
-  // Synthesize a stub for scheduled-only entries.
+  if (entry.kind === "filed" && entry.m) {
+    const m = entry.m;
+    // A meeting is "held" once its minutes are Approved. Records that exist in
+    // eec-data but are still Scheduled (e.g. a future meeting stub) are upcoming —
+    // fold in any planned agenda for that date so the agenda renders.
+    if (m.minutesStatus === "Approved") return { ...m, scheduled: false };
+    const planned = (m.items && m.items.length) ? m.items : plannedFor(m.committee, m.date);
+    return { ...m, scheduled: true, items: planned, planned: planned.length > 0 };
+  }
+  // Synthesize a stub for scheduled-only entries, folding in planned agenda.
+  const planned = plannedFor(entry.committee, entry.date);
   return {
     id: `scheduled:${entry.committee}:${entry.date}`,
     date: entry.date,
@@ -535,11 +552,12 @@ function entryToMeeting(entry) {
     time: entry.time || null,
     modality: null,
     presidingOfficer: null,
-    items: [], topics: [],
+    items: planned, topics: [],
     present: [], absent: [], exOfficio: [], guests: [], recused: [],
     attendanceRate: null,
     minutesStatus: "Pending intake",
     scheduled: true,
+    planned: planned.length > 0,
   };
 }
 
@@ -904,7 +922,11 @@ function MeetingRow({ entry, committee, onPick }) {
   const future = d >= today;
   const isFiled = entry.kind === "filed";
   const m = entry.m; // only present for filed entries
-  const items = isFiled ? (m.items || []).slice(0, 3) : [];
+  const held = isFiled && m && m.minutesStatus === "Approved";
+  // Planned agenda for not-yet-held meetings (renders once planned-agenda.js is loaded).
+  const planned = held ? [] : plannedFor(entry.committee, entry.date);
+  const agenda = held ? (m.items || []) : planned;
+  const items = agenda.slice(0, 3);
 
   return (
     <button className="m-meet-row"
@@ -923,17 +945,17 @@ function MeetingRow({ entry, committee, onPick }) {
               : (entry.session || entry.time || "Scheduled")}
           </span>
           <span className={"status" + (future ? " future" : "")}>
-            {isFiled ? m.minutesStatus : (future ? "Scheduled" : "Pending")}
+            {held ? m.minutesStatus : (planned.length ? "Agenda set" : (future ? "Scheduled" : "Pending"))}
           </span>
         </div>
-        {isFiled && items.length > 0 ? (
+        {items.length > 0 ? (
           <ul className="agenda">
             {items.map((it, i) => <li key={i}>{shortAgenda(it)}</li>)}
-            {m.items && m.items.length > 3 && (
-              <li className="more">+{m.items.length - 3} more agenda items</li>
+            {agenda.length > 3 && (
+              <li className="more">+{agenda.length - 3} more agenda items</li>
             )}
           </ul>
-        ) : isFiled ? (
+        ) : held ? (
           <ul className="agenda">
             {(m.topics || []).slice(0, 3).map((t, i) => <li key={i}>{t}</li>)}
           </ul>
@@ -961,7 +983,7 @@ function MeetingScreen({ entry, onPick }) {
   const hasFile = !m.scheduled && window.MOBILE_SCHEDULE.hasMinutesFile(m.date);
 
   const buttons = [
-    { kind: "summary",     label: "Meeting Summary",          count: m.scheduled ? null : (m.items?.length || 0), sub: m.scheduled ? "not circulated" : "agenda items", color: "var(--brand-violet)", disabled: m.scheduled },
+    { kind: "summary",     label: "Meeting Summary",          count: (m.scheduled && !m.planned) ? null : (m.items?.length || 0), sub: m.scheduled ? (m.planned ? "planned agenda" : "not circulated") : "agenda items", color: "var(--brand-violet)", disabled: m.scheduled && !m.planned },
     { kind: "governance",  label: "Governance Action Plans",   count: m.scheduled ? null : govActions.length, sub: m.scheduled ? "pending" : "plans", color: "var(--brand-cyan)",  disabled: m.scheduled },
     { kind: "operational", label: "Operational Action Plans",  count: m.scheduled ? null : opActions.length,  sub: m.scheduled ? "pending" : "plans", color: "var(--good)",        disabled: m.scheduled },
     { kind: "download",    label: hasFile ? "Download Minutes" : "Minutes Unavailable", count: null, sub: hasFile ? ".docx" : (m.scheduled ? "pending intake" : "not on file"), color: hasFile ? "var(--brand-magenta)" : "var(--grey-5)", disabled: !hasFile },
@@ -1099,12 +1121,15 @@ function SummaryDetail({ m, c, onItem }) {
         </div>
       )}
 
-      {items.map((it, i) => <AgendaItem key={i} item={it} onClick={() => onItem && onItem("agenda-item", { meetingId: m.id, idx: it.idx })} />)}
+      {items.map((it, i) => (
+        <AgendaItem key={i} item={it} planned={!!m.scheduled}
+          onClick={(!m.scheduled && it.idx) ? (() => onItem && onItem("agenda-item", { meetingId: m.id, idx: it.idx })) : undefined} />
+      ))}
     </div>
   );
 }
 
-function AgendaItem({ item, onClick }) {
+function AgendaItem({ item, onClick, planned }) {
   const cat = (item.category || "").trim().toUpperCase();
   const catStyle =
     cat.includes("VOTING") ? { background: "var(--brand-magenta)", color: "#fff" } :
@@ -1139,6 +1164,16 @@ function AgendaItem({ item, onClick }) {
           </svg>
         )}
       </div>
+      {planned && item.subitems && item.subitems.length > 0 && (
+        <ul style={{ margin: "6px 0 0", paddingLeft: 16, color: "var(--grey-11)", fontSize: 11, lineHeight: 1.4 }}>
+          {item.subitems.map((s, i) => <li key={i}>{s}</li>)}
+        </ul>
+      )}
+      {planned && (item.owner || item.presenter) && (
+        <div style={{ fontSize: 10.5, color: "var(--grey-7)", marginTop: 6 }}>
+          {[item.owner, item.presenter].filter(Boolean).join(" · ")}
+        </div>
+      )}
       {item.outcome && (
         <div className="outcome" style={{
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",

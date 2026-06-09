@@ -80,7 +80,7 @@
       "presenter": "Staci Leisman, MD (PCCS Admin Co-Chair)"
     },
     {
-      "title": "Outcomes of NBME Examinations Performance and Resident Review Survey Results - Criteria for Sucess",
+      "title": "Outcomes of NBME Examinations Performance and Resident Review Survey Results - Criteria for Success",
       "category": "Review with Vote",
       "owner": "AES",
       "presenter": "Jacob Shreffler, PhD (AES Admin Co-Chair)",
