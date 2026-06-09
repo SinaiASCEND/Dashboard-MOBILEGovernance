@@ -732,18 +732,12 @@ function HomeScreen({ onPick, onSection }) {
   const lastSync = new Date(window.EEC.TODAY);
   const lastSyncStr = lastSync.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 
-  // OCA stats (recurring weekly schedule)
-  const ocaNext = SCHED.nextMeeting("OCA");
-
-  const tiles = ["EEC", "PCCS", "CCS", "AES"].map(id => {
+  const tileFor = (id) => {
     const c = window.EEC.committeeById[id];
-    return {
-      ...c,
-      total: SCHED.totalCount(id),
-      filed: SCHED.filedCount(id),
-      next: SCHED.nextMeeting(id),
-    };
-  });
+    return { ...c, total: SCHED.totalCount(id), filed: SCHED.filedCount(id), next: SCHED.nextMeeting(id) };
+  };
+  const eecTile = tileFor("EEC");
+  const subTiles = ["PCCS", "CCS", "CIS", "AES"].map(tileFor);
 
   return (
     <div className="m-body" style={{ paddingTop: 0 }}>
@@ -764,32 +758,21 @@ function HomeScreen({ onPick, onSection }) {
         </div>
       </div>
 
-      {/* OCA hero button */}
-      <button className="m-oca" onClick={() => onPick("OCA")}>
-        <div>
-          <div className="eyebrow"><span className="dot"></span>OCA</div>
-          <div className="title">Curricular Affairs<br/>Meetings</div>
-          <div className="stats">
-            <span>Mon 10am–12pm · Thu 1:30–2:30pm</span>
-            {ocaNext && <>
-              <span className="sep"></span>
-              <span>Next · {window.MS_DATE.parseLocal(ocaNext.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}</span>
-            </>}
-          </div>
-        </div>
-        <div className="chev"><Chev size={14} /></div>
-      </button>
+      {/* EEC — full width across the top */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", marginTop: 4 }}>
+        <CommitteeTile c={eecTile} onPick={onPick} />
+      </div>
 
-      {/* 2x2 committee grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 14 }}>
-        {tiles.map(t => <CommitteeTile key={t.id} c={t} onPick={onPick} />)}
+      {/* Four subcommittees */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
+        {subTiles.map(t => <CommitteeTile key={t.id} c={t} onPick={onPick} />)}
       </div>
 
       {/* Explore the rest of the desktop dashboard from here */}
       {window.MobileSections && <window.MobileSections.ExploreList onPick={onSection} />}
 
       <div style={{ fontSize: 10.5, color: "var(--grey-7)", textAlign: "center", marginTop: 22, lineHeight: 1.55 }}>
-        16 EEC minutes filed through May 2026. Subcommittee minutes (PCCS · CCS · AES · CIS) and OCA minutes pending intake from each chair.
+        16 EEC minutes filed through May 2026. Subcommittee minutes (PCCS · CCS · CIS · AES) pending intake from each chair.
       </div>
     </div>
   );
