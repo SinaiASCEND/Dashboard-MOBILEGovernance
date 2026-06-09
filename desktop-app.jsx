@@ -604,6 +604,52 @@
     return days > 0 ? `in ${days} days` : `${Math.abs(days)} days ago`;
   }
 
+  // Group items into [{key,label,items}] by calendar month, newest month first.
+  function groupByMonth(items, getDate) {
+    const map = new Map();
+    for (const it of items) {
+      const key = (getDate(it) || "").slice(0, 7); // YYYY-MM
+      if (!key) continue;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(it);
+    }
+    return [...map.entries()]
+      .sort((a, b) => b[0].localeCompare(a[0]))
+      .map(([key, list]) => ({
+        key,
+        label: D(key + "-01").toLocaleDateString("en-US", { month: "long", year: "numeric" }),
+        items: list,
+      }));
+  }
+
+  // Collapsible month "tile" used under the meeting/motion hero cards.
+  function MonthTile({ label, count, open, onToggle, children }) {
+    return (
+      <div className="card" style={{ padding: 0, overflow: "hidden", marginBottom: 10 }}>
+        <button onClick={onToggle}
+          style={{ width: "100%", display: "flex", alignItems: "center", gap: 10, padding: "11px 16px",
+                   background: "var(--paper)", border: 0, cursor: "pointer", font: "inherit", textAlign: "left" }}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--grey-7)" strokeWidth="2.4"
+               strokeLinecap="round" strokeLinejoin="round"
+               style={{ transform: open ? "rotate(90deg)" : "none", transition: "transform .15s", flex: "0 0 13px" }}>
+            <polyline points="9 6 15 12 9 18" />
+          </svg>
+          <span style={{ fontWeight: 600, fontSize: 13, color: "var(--ink)" }}>{label}</span>
+          <span className="mono" style={{ marginLeft: "auto", fontSize: 11, color: "var(--grey-11)" }}>{count}</span>
+        </button>
+        {open && <div style={{ borderTop: "1px solid var(--grey-2)" }}>{children}</div>}
+      </div>
+    );
+  }
+
+  // Per-month open/collapse state; newest month open by default.
+  function useMonthAccordion() {
+    const [open, setOpen] = useState({});
+    const isOpen = (k, i) => (k in open ? open[k] : i === 0);
+    const toggle = (k, i) => setOpen((o) => ({ ...o, [k]: !(k in o ? o[k] : i === 0) }));
+    return { isOpen, toggle };
+  }
+
   function MeetingHero({ kind, m, onSelect, todayStr }) {
     const isNext = kind === "next";
     const label = isNext ? "Next meeting" : "Most recent meeting";
@@ -656,6 +702,8 @@
       const keep = new Set([nx && nx.id, pa && pa.id].filter(Boolean));
       return { past: pa, next: nx, rest: rows.filter((m) => !keep.has(m.id)) };
     }, [rows, todayStr]);
+    const groups = useMemo(() => groupByMonth(rest, (m) => m.date), [rest]);
+    const acc = useMonthAccordion();
 
     return (
       <>
@@ -672,31 +720,34 @@
             {rest.length > 0 && (
               <>
                 <div className="d-rest-head">All meetings · {rest.length}</div>
-                <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-                  <table className="tbl">
-                    <thead><tr><th style={{ paddingLeft: 16 }}>Date</th><th>Committee</th><th>Type</th><th className="num">Agenda</th><th className="num">Motions</th><th>Attendance</th><th>Status</th></tr></thead>
-                    <tbody>
-                      {rest.map((m) => {
-                        const motions = e.MOTIONS.filter((v) => v.meetingId === m.id).length;
-                        const att = m.attendanceRate != null ? Math.round(m.attendanceRate * 100) + "%" : "—";
-                        const nItems = (m.items || []).length;
-                        const statusLabel = m.planned ? "Agenda set" : m.minutesStatus;
-                        const statusCls = m.planned ? "cyan" : minutesPill(m.minutesStatus);
-                        return (
-                          <tr key={m.id} className="row-link" onClick={() => onSelect({ type: "meeting", id: m.id })}>
-                            <td style={{ paddingLeft: 16, whiteSpace: "nowrap" }} className="mono">{fmt(m.date, "mdy")}</td>
-                            <td><CDot id={m.committee} /></td>
-                            <td style={{ maxWidth: 280 }}>{m.type.replace("Regular Scheduled Meeting", "Regular")}</td>
-                            <td className="num">{nItems || "—"}</td>
-                            <td className="num">{motions || "—"}</td>
-                            <td className="t-mono" style={{ color: "var(--grey-11)" }}>{att}</td>
-                            <td><span className={"pill " + statusCls}>{statusLabel}</span></td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
+                {groups.map((g, gi) => (
+                  <MonthTile key={g.key} label={g.label} count={g.items.length}
+                             open={acc.isOpen(g.key, gi)} onToggle={() => acc.toggle(g.key, gi)}>
+                    <table className="tbl">
+                      <thead><tr><th style={{ paddingLeft: 16 }}>Date</th><th>Committee</th><th>Type</th><th className="num">Agenda</th><th className="num">Motions</th><th>Attendance</th><th>Status</th></tr></thead>
+                      <tbody>
+                        {g.items.map((m) => {
+                          const motions = e.MOTIONS.filter((v) => v.meetingId === m.id).length;
+                          const att = m.attendanceRate != null ? Math.round(m.attendanceRate * 100) + "%" : "—";
+                          const nItems = (m.items || []).length;
+                          const statusLabel = m.planned ? "Agenda set" : m.minutesStatus;
+                          const statusCls = m.planned ? "cyan" : minutesPill(m.minutesStatus);
+                          return (
+                            <tr key={m.id} className="row-link" onClick={() => onSelect({ type: "meeting", id: m.id })}>
+                              <td style={{ paddingLeft: 16, whiteSpace: "nowrap" }} className="mono">{fmt(m.date, "mdy")}</td>
+                              <td><CDot id={m.committee} /></td>
+                              <td style={{ maxWidth: 280 }}>{m.type.replace("Regular Scheduled Meeting", "Regular")}</td>
+                              <td className="num">{nItems || "—"}</td>
+                              <td className="num">{motions || "—"}</td>
+                              <td className="t-mono" style={{ color: "var(--grey-11)" }}>{att}</td>
+                              <td><span className={"pill " + statusCls}>{statusLabel}</span></td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </MonthTile>
+                ))}
               </>
             )}
           </>
@@ -942,56 +993,77 @@
   // ════════════════ ATTENDANCE (EEC heatmap) ════════════════
   function Attendance({ onSelect }) {
     const e = E();
-    const meetings = useMemo(() => e.MEETINGS.filter(isFiled).sort((a, b) => a.date.localeCompare(b.date)), []);
-    const members = useMemo(() => e.MEMBERS.filter((m) => (m.presentCount + m.absentCount) > 0)
-      .map((m) => ({ ...m, _pct: m.presentCount / (m.presentCount + m.absentCount) }))
-      .sort((a, b) => b._pct - a._pct || a.name.localeCompare(b.name)), []);
+    const V2_START = "2026-06-01"; // EEC Bylaws v2.0 era — attendance tracked from June 2026 onward
+    const [committee, setCommittee] = useState("EEC");
+
+    // Filed meetings for this committee in the v2.0 era (June 2026+).
+    const meetings = useMemo(() =>
+      e.MEETINGS
+        .filter((m) => m.committee === committee && isFiled(m) && m.date >= V2_START)
+        .sort((a, b) => a.date.localeCompare(b.date)),
+      [committee]);
+
+    // Present / absent member-id sets per meeting.
+    const cols = useMemo(() => meetings.map((mt) => ({
+      id: mt.id, date: mt.date,
+      present: new Set([...(mt.present || []), ...(mt.exOfficio || []), ...(mt.operations || [])]),
+      absent: new Set(mt.absent || []),
+    })), [meetings]);
+
+    // Roster = every member holding a seat on this committee.
+    const roster = useMemo(() =>
+      e.MEMBERS
+        .filter((m) => (m.seats || []).some((s) => s.committee === committee))
+        .map((m) => {
+          const cells = cols.map((c) => ({ id: c.id, st: c.present.has(m.id) ? "p" : c.absent.has(m.id) ? "a" : "-" }));
+          const p = cells.filter((x) => x.st === "p").length;
+          const a = cells.filter((x) => x.st === "a").length;
+          const pct = (p + a) > 0 ? Math.round((p / (p + a)) * 100) : null;
+          return { id: m.id, name: m.name, role: m.role, cells, pct };
+        })
+        .sort((x, y) => (y.pct == null ? -1 : y.pct) - (x.pct == null ? -1 : x.pct) || x.name.localeCompare(y.name)),
+      [committee, cols]);
 
     return (
       <>
-        <div className="d-head"><h1>Attendance</h1><div className="lede">EEC attendance matrix across {meetings.length} meetings with filed minutes. Each member's voting attendance is plotted by meeting; click a name for their full record.</div></div>
-        <div className="card" style={{ marginBottom: 18 }}>
-          <div className="card-header"><span className="card-title">Attendance rate by meeting</span><span className="card-meta">% of voting members present</span></div>
-          <AttendanceTrend height={210} />
-        </div>
-        <div className="d-heatwrap">
+        <div className="d-head"><h1>Attendance</h1><div className="lede">Per-member attendance for each committee under EEC Bylaws v2.0, tracked from June 2026 onward. Pick a committee; the matrix fills in as each meeting's minutes are filed. Click a name for the member's full record.</div></div>
+        <CommitteeFilter value={committee} onChange={setCommittee} includeAll={false} />
+        {meetings.length === 0 && (
+          <div className="d-empty">
+            <h3>No v2.0 meetings on record yet</h3>
+            <p>{cmt(committee).name} attendance is tracked for meetings on or after June 2026. This matrix will populate as those minutes are filed. Roster below: {roster.length} seated member{roster.length === 1 ? "" : "s"}.</p>
+          </div>
+        )}
+        <div className="d-heatwrap" style={{ marginTop: 14 }}>
           <table className="d-heat">
             <thead>
               <tr>
-                <th className="namecol">Member ({members.length})</th>
+                <th className="namecol">{cmt(committee).short} member ({roster.length})</th>
                 {meetings.map((m) => <th key={m.id} className="dcol" title={fmt(m.date, "long")}>{D(m.date).toLocaleDateString("en-US", { month: "numeric", day: "numeric" })}</th>)}
                 <th className="dcol pctcol" style={{ position: "sticky", right: 0, background: "var(--paper)" }}>%</th>
               </tr>
             </thead>
             <tbody>
-              {members.map((m) => {
-                const pres = new Set(m.meetingsPresent || []);
-                const abs = new Set(m.meetingsAbsent || []);
-                const tot = m.presentCount + m.absentCount;
-                const pct = Math.round((m.presentCount / tot) * 100);
-                return (
-                  <tr key={m.id}>
-                    <td className="namecol" style={{ cursor: "pointer" }} onClick={() => onSelect({ type: "member", id: m.id })}>
-                      <div style={{ fontSize: 12, fontWeight: 600 }}>{m.name}</div>
-                      <div className="sub" style={{ fontSize: 10.5 }}>{(m.role || "").slice(0, 42)}</div>
-                    </td>
-                    {meetings.map((mt) => {
-                      const st = pres.has(mt.date) ? "p" : abs.has(mt.date) ? "a" : "-";
-                      const bg = st === "p" ? "var(--good)" : st === "a" ? "var(--bad-tint)" : "var(--grey-1)";
-                      const bd = st === "a" ? "1px solid var(--bad)" : "none";
-                      return <td key={mt.id} className="cell"><div className="box" style={{ background: st === "p" ? bg : (st === "a" ? "var(--bad-tint)" : "var(--grey-1)"), border: bd, opacity: st === "-" ? 0.5 : 1 }} /></td>;
-                    })}
-                    <td className="pctcol" style={{ position: "sticky", right: 0, background: "var(--paper)", color: pct >= 70 ? "var(--good)" : pct >= 40 ? "var(--warn)" : "var(--bad)" }}>{pct}</td>
-                  </tr>
-                );
-              })}
+              {roster.map((m) => (
+                <tr key={m.id}>
+                  <td className="namecol" style={{ cursor: "pointer" }} onClick={() => onSelect({ type: "member", id: m.id })}>
+                    <div style={{ fontSize: 12, fontWeight: 600 }}>{m.name}</div>
+                    <div className="sub" style={{ fontSize: 10.5 }}>{(m.role || "").slice(0, 42)}</div>
+                  </td>
+                  {m.cells.map((c) => {
+                    const bd = c.st === "a" ? "1px solid var(--bad)" : "none";
+                    return <td key={c.id} className="cell"><div className="box" style={{ background: c.st === "p" ? "var(--good)" : (c.st === "a" ? "var(--bad-tint)" : "var(--grey-1)"), border: bd, opacity: c.st === "-" ? 0.5 : 1 }} /></td>;
+                  })}
+                  <td className="pctcol" style={{ position: "sticky", right: 0, background: "var(--paper)", color: m.pct == null ? "var(--grey-7)" : m.pct >= 70 ? "var(--good)" : m.pct >= 40 ? "var(--warn)" : "var(--bad)" }}>{m.pct == null ? "—" : m.pct}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
         <div className="d-legend">
           <span className="it"><span className="sw" style={{ background: "var(--good)" }} /> Present</span>
           <span className="it"><span className="sw" style={{ background: "var(--bad-tint)", border: "1px solid var(--bad)" }} /> Absent</span>
-          <span className="it"><span className="sw" style={{ background: "var(--grey-1)", opacity: 0.6 }} /> Not on roster / no record</span>
+          <span className="it"><span className="sw" style={{ background: "var(--grey-1)", opacity: 0.6 }} /> No record</span>
         </div>
       </>
     );
@@ -1008,6 +1080,8 @@
       return vs.sort((a, b) => b.date.localeCompare(a.date));
     }, [committee, result]);
     const results = [...new Set(e.MOTIONS.map((v) => v.result))];
+    const groups = useMemo(() => groupByMonth(rows, (v) => v.date), [rows]);
+    const acc = useMonthAccordion();
 
     return (
       <>
@@ -1022,22 +1096,25 @@
           </label>
           <div className="spacer" /><span className="t-num" style={{ fontSize: 12, color: "var(--grey-11)" }}>{rows.length} motions</span>
         </div>
-        <div className="card" style={{ padding: 0, overflow: "hidden" }}>
-          <table className="tbl">
-            <thead><tr><th style={{ paddingLeft: 16 }}>Date</th><th>Committee</th><th>Motion</th><th>Result</th><th>LCME</th></tr></thead>
-            <tbody>
-              {rows.map((v) => (
-                <tr key={v.id} className="row-link" onClick={() => onSelect({ type: "meeting", id: v.meetingId })}>
-                  <td style={{ paddingLeft: 16, whiteSpace: "nowrap" }} className="mono">{fmt(v.date, "mdy")}</td>
-                  <td><CDot id={v.committee} /></td>
-                  <td style={{ maxWidth: 460 }}>{v.title}</td>
-                  <td><span className={"pill " + resultPill(v.result)}>{v.result}</span></td>
-                  <td><LcmeChips ids={v.lcme} /></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {groups.map((g, gi) => (
+          <MonthTile key={g.key} label={g.label} count={g.items.length}
+                     open={acc.isOpen(g.key, gi)} onToggle={() => acc.toggle(g.key, gi)}>
+            <table className="tbl">
+              <thead><tr><th style={{ paddingLeft: 16 }}>Date</th><th>Committee</th><th>Motion</th><th>Result</th><th>LCME</th></tr></thead>
+              <tbody>
+                {g.items.map((v) => (
+                  <tr key={v.id} className="row-link" onClick={() => onSelect({ type: "meeting", id: v.meetingId })}>
+                    <td style={{ paddingLeft: 16, whiteSpace: "nowrap" }} className="mono">{fmt(v.date, "mdy")}</td>
+                    <td><CDot id={v.committee} /></td>
+                    <td style={{ maxWidth: 460 }}>{v.title}</td>
+                    <td><span className={"pill " + resultPill(v.result)}>{v.result}</span></td>
+                    <td><LcmeChips ids={v.lcme} /></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </MonthTile>
+        ))}
       </>
     );
   }
