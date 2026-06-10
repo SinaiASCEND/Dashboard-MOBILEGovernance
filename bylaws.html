@@ -1,160 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EEC Bylaws &amp; Subcommittee Charters · ASCEND Curriculum Governance</title>
+<title>Bylaws & Charters · ASCEND Curriculum · Icahn School of Medicine at Mount Sinai</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=Source+Serif+4:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --brand-cyan:#00AEEF; --brand-cyan-deep:#008CC0; --brand-cyan-tint:#E5F6FD;
-    --brand-magenta:#D80B8C; --brand-magenta-deep:#B0086F;
-    --brand-violet:#221F72; --brand-violet-tint:#E9E8F1;
-    --ink:#141414; --grey-11:#58595B; --grey-7:#8A8B8E; --grey-5:#B7B8BB;
-    --grey-3:#DEDFE2; --grey-2:#ECEDEF; --grey-1:#F5F6F7; --paper:#FFFFFF;
-    --serif:"Source Serif 4",Georgia,serif;
-    --sans:"Inter Tight","Helvetica Neue",Helvetica,Arial,sans-serif;
+    --navy:#0f1e3d; --violet:#5a3fd6; --violet-deep:#3f2bb0; --violet-tint:#efecfb;
+    --cyan:#14b8d4; --magenta:#cf2592;
+    --ink:#16181d; --ink-2:#3a3f4a; --grey-7:#8a909c; --grey-11:#5b616e;
+    --grey-1:#f4f5f7; --grey-2:#e7e9ee; --grey-3:#d7dae1; --paper:#fff; --bg:#eef0f4;
+    --serif:"Source Serif 4",Georgia,serif; --sans:"Inter Tight",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
   }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:var(--sans);color:var(--ink);background:var(--grey-1);line-height:1.5;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:880px;margin:0 auto;padding:28px 20px 64px}
-  .back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--grey-11);text-decoration:none;margin-bottom:22px}
-  .back:hover{color:var(--brand-cyan-deep)}
-  .back svg{width:15px;height:15px;stroke:currentColor;stroke-width:2.2;fill:none}
-  .eyebrow{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--brand-magenta)}
-  h1{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1.15;margin:6px 0 8px;color:var(--brand-violet)}
-  .lede{font-size:15px;color:var(--grey-11);max-width:62ch}
-  .rule{height:3px;background:var(--brand-violet);border-radius:2px;margin:22px 0 26px}
-  .sec-label{font-family:var(--serif);font-size:19px;font-weight:600;color:var(--ink);margin:34px 0 14px}
-  /* card */
-  .card{background:var(--paper);border:1px solid var(--grey-3);border-radius:14px;padding:20px 20px;margin-bottom:14px;display:flex;gap:18px;align-items:flex-start}
-  .card.hero{border-color:var(--brand-violet);border-left:5px solid var(--brand-violet);background:linear-gradient(180deg,#fff, #fbfbfe)}
-  .accent{border-left:5px solid var(--accent,var(--brand-cyan))}
-  .ic{flex:0 0 46px;height:46px;border-radius:11px;display:grid;place-items:center;background:var(--brand-violet-tint);color:var(--brand-violet)}
-  .accent .ic{background:color-mix(in srgb,var(--accent) 14%,#fff);color:var(--accent)}
-  .ic svg{width:22px;height:22px;stroke:currentColor;stroke-width:1.8;fill:none}
-  .body{flex:1;min-width:0}
-  .title{font-size:16px;font-weight:600;color:var(--ink)}
-  .hero .title{font-size:18px}
-  .meta{font-size:12px;color:var(--grey-7);margin-top:2px;font-weight:500}
-  .desc{font-size:13.5px;color:var(--grey-11);margin-top:8px}
-  .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-  .btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:13px;font-weight:600;padding:8px 14px;border-radius:9px;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:transform .04s ease}
-  .btn:active{transform:translateY(1px)}
-  .btn svg{width:15px;height:15px;stroke:currentColor;stroke-width:2;fill:none}
-  .btn-pri{background:var(--brand-magenta);color:#fff}
-  .btn-pri:hover{background:var(--brand-magenta-deep)}
-  .btn-sec{background:#fff;color:var(--brand-violet);border-color:var(--grey-3)}
-  .btn-sec:hover{border-color:var(--brand-violet);background:var(--brand-violet-tint)}
-  .foot{margin-top:34px;padding-top:16px;border-top:1px solid var(--grey-3);font-size:12px;color:var(--grey-7);line-height:1.6}
-  @media(max-width:560px){
-    h1{font-size:24px}
-    .card{flex-direction:column;gap:12px;padding:16px}
-    .ic{flex-basis:42px;height:42px}
-    .btn{flex:1;justify-content:center}
-  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);}
+  .brandbar{background:var(--navy);color:#fff}
+  .brandbar .inner{max-width:920px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:12px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;font-weight:600}
+  .brandbar .dot{width:9px;height:9px;border-radius:2px;background:var(--magenta)}
+  .brandbar .sep{opacity:.4}
+  .rule{height:4px;background:linear-gradient(90deg,var(--violet),var(--cyan) 60%,var(--magenta))}
+  .wrap{max-width:920px;margin:0 auto;padding:34px 20px 80px}
+  .eyebrow{font-size:12px;letter-spacing:.10em;text-transform:uppercase;color:var(--violet-deep);font-weight:700}
+  h1.title{font-family:var(--serif);font-weight:700;font-size:30px;color:var(--navy);margin:8px 0 6px}
+  .lede{color:var(--grey-11);font-size:14px;max-width:680px;line-height:1.55}
+  .grid{margin-top:26px;display:flex;flex-direction:column;gap:14px}
+  .card{position:relative;background:var(--paper);border:1px solid var(--grey-2);border-radius:14px;
+    box-shadow:0 1px 3px rgba(15,30,61,.05);padding:20px 22px 20px 26px;overflow:hidden}
+  .card .accent{position:absolute;left:0;top:0;bottom:0;width:5px}
+  .card .badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+    padding:3px 9px;border-radius:999px;margin-bottom:8px}
+  .card h2{font-family:var(--serif);font-size:19px;color:var(--navy);margin:0 0 4px}
+  .card p{margin:0 0 14px;color:var(--ink-2);font-size:13.5px;line-height:1.5;max-width:640px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;text-decoration:none;
+    padding:8px 15px;border-radius:9px;border:1px solid var(--grey-3);color:var(--ink);background:var(--paper);transition:.15s}
+  .btn:hover{border-color:var(--violet);color:var(--violet-deep);background:var(--violet-tint)}
+  .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff}
+  .btn.primary:hover{background:var(--violet-deep);border-color:var(--violet-deep)}
+  .btn svg{width:15px;height:15px}
+  footer{margin-top:34px;font-size:11.5px;color:var(--grey-7)}
+  @media(max-width:560px){.card{padding:18px}}
 </style>
 </head>
 <body>
-<div class="wrap">
-
-  <a class="back" href="index.html">
-    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
-    Back to Dashboard
-  </a>
-
-  <div class="eyebrow">ASCEND Curriculum Governance · Executive Education Committee</div>
-  <h1>Bylaws &amp; Subcommittee Charters</h1>
-  <p class="lede">The governing bylaws of the Executive Education Committee and the charters of its four standing subcommittees. View any document in your browser or download a copy.</p>
+  <div class="brandbar"><div class="inner"><span class="dot"></span>ASCEND Curriculum<span class="sep">·</span>Icahn School of Medicine at Mount Sinai</div></div>
   <div class="rule"></div>
+  <div class="wrap">
+    <div class="eyebrow">MD Program · Curricular Governance</div>
+    <h1 class="title">Bylaws &amp; Charters</h1>
+    <div class="lede">Governing documents for the Executive Education Committee and its four standing subcommittees. Each is available as a web (HTML) view and as a PDF. Subcommittee charters open to the corresponding appendix of the EEC Bylaws.</div>
 
-  <!-- Full bylaws -->
-  <div class="card hero">
-    <div class="ic">
-      <svg viewBox="0 0 24 24"><path d="M4 4h11l5 5v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1z"/><path d="M14 4v5h5"/><path d="M8 13h8M8 17h6"/></svg>
-    </div>
-    <div class="body">
-      <div class="title">EEC Bylaws — Version 2.0</div>
-      <div class="meta">Complete governing document · includes Appendices A–E · 22 pages</div>
-      <div class="desc">Establishes the EEC's authority, scope of oversight, membership, meetings, standing subcommittees, student representation in governance, and the amendment process. Appendices A–D contain the subcommittee charters; Appendix E is the revision log.</div>
-      <div class="btns">
-        <a class="btn btn-pri" href="EEC_Bylaws_v2.0.pdf" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
-          View
-        </a>
-        <a class="btn btn-sec" href="EEC_Bylaws_v2.0.pdf" download>
-          <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></svg>
-          Download PDF
-        </a>
+    <div class="grid">
+
+      <div class="card">
+        <span class="accent" style="background:var(--violet)"></span>
+        <span class="badge" style="background:var(--violet-tint);color:var(--violet-deep)">EEC · Bylaws</span>
+        <h2>Executive Education Committee — Bylaws</h2>
+        <p>Version 2.0 (draft, pending EEC approval). Purpose and authority, membership, meetings and voting, standing subcommittees, student representation, amendments, and Appendices A–E.</p>
+        <div class="btns">
+          <a class="btn primary" href="eec-bylaws.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/></svg>View (HTML)</a>
+          <a class="btn" href="EEC_Bylaws_v2.0.pdf" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/></svg>PDF</a>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <div class="sec-label">Subcommittee Charters</div>
-
-  <!-- PCCS -->
-  <div class="card accent" style="--accent:var(--brand-cyan-deep)">
-    <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 12h16M4 19h10"/></svg></div>
-    <div class="body">
-      <div class="title">Pre-Clerkship Curriculum Subcommittee (PCCS)</div>
-      <div class="meta">25 voting · 5 non-voting seats · oversees Phase 1</div>
-      <div class="desc">Design, implementation, integration, and evaluation of the pre-clerkship phase, aligning foundational science and early clinical learning with the Medical Education Program Objectives.</div>
-      <div class="btns">
-        <a class="btn btn-pri" href="PCCS_Charter.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
-        <a class="btn btn-sec" href="PCCS_Charter.pdf" download><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></svg>Download PDF</a>
+      <div class="card">
+        <span class="accent" style="background:var(--cyan)"></span>
+        <span class="badge" style="background:#e2f6fb;color:#0b7c92">PCCS · Charter</span>
+        <h2>Pre-Clerkship Curriculum Subcommittee (PCCS)</h2>
+        <p>Charge, responsibilities, and voting / non-voting membership for oversight of the pre-clerkship phase (Phase 1) of the MD curriculum.</p>
+        <div class="btns">
+          <a class="btn primary" href="eec-bylaws.html#appendix-a.-pre-clerkship-curriculum-subcommittee-pccs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/></svg>View (HTML)</a>
+          <a class="btn" href="PCCS_Charter.pdf" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/></svg>PDF</a>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- CCS -->
-  <div class="card accent" style="--accent:var(--brand-magenta)">
-    <div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l7-5 7 5"/><path d="M5 8v8l7 5 7-5V8"/></svg></div>
-    <div class="body">
-      <div class="title">Clinical Curriculum Subcommittee (CCS)</div>
-      <div class="meta">24 voting · 6 non-voting seats · oversees the clinical phases</div>
-      <div class="desc">Design, implementation, and evaluation of clinical education — required clerkships, acting internships, and clinical learning experiences — including comparability across sites and assessment standards.</div>
-      <div class="btns">
-        <a class="btn btn-pri" href="CCS_Charter.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
-        <a class="btn btn-sec" href="CCS_Charter.pdf" download><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></svg>Download PDF</a>
+      <div class="card">
+        <span class="accent" style="background:var(--magenta)"></span>
+        <span class="badge" style="background:#fbe6f3;color:#a51873">CCS · Charter</span>
+        <h2>Clinical Curriculum Subcommittee (CCS)</h2>
+        <p>Charge, responsibilities, and voting / non-voting membership for oversight of clinical education — clerkships, acting internships, and required clinical experiences.</p>
+        <div class="btns">
+          <a class="btn primary" href="eec-bylaws.html#appendix-b.-clinical-curriculum-subcommittee-ccs"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/></svg>View (HTML)</a>
+          <a class="btn" href="CCS_Charter.pdf" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/></svg>PDF</a>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- CIS -->
-  <div class="card accent" style="--accent:var(--brand-violet)">
-    <div class="ic"><svg viewBox="0 0 24 24"><circle cx="6" cy="6" r="2.4"/><circle cx="18" cy="6" r="2.4"/><circle cx="12" cy="18" r="2.4"/><path d="M7.6 7.6L11 15.8M16.4 7.6L13 15.8M8 6h8"/></svg></div>
-    <div class="body">
-      <div class="title">Curriculum Integration Subcommittee (CIS)</div>
-      <div class="meta">19 voting · 4 non-voting seats · horizontal &amp; vertical integration</div>
-      <div class="desc">Alignment and sequencing of content across phases — curriculum mapping, longitudinal threads, Areas of Concentration, and integration of foundational and clinical sciences.</div>
-      <div class="btns">
-        <a class="btn btn-pri" href="CIS_Charter.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
-        <a class="btn btn-sec" href="CIS_Charter.pdf" download><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></svg>Download PDF</a>
+      <div class="card">
+        <span class="accent" style="background:#1f9d57"></span>
+        <span class="badge" style="background:#e3f6ec;color:#157a42">CIS · Charter</span>
+        <h2>Curriculum Integration Subcommittee (CIS)</h2>
+        <p>Charge, responsibilities, and voting / non-voting membership for horizontal and vertical integration of curricular content across phases.</p>
+        <div class="btns">
+          <a class="btn primary" href="eec-bylaws.html#appendix-c.-curriculum-integration-subcommittee-cis"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/></svg>View (HTML)</a>
+          <a class="btn" href="CIS_Charter.pdf" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/></svg>PDF</a>
+        </div>
       </div>
-    </div>
-  </div>
 
-  <!-- AES -->
-  <div class="card accent" style="--accent:var(--brand-cyan)">
-    <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M8 16v-5M12 16V8M16 16v-7"/></svg></div>
-    <div class="body">
-      <div class="title">Assessment and Evaluation Subcommittee (AES)</div>
-      <div class="meta">11 voting · 1 non-voting seat · assessment &amp; program evaluation</div>
-      <div class="desc">Assessment strategy and program evaluation across the curriculum — alignment of assessment methods with objectives and use of evaluation data for continuous improvement.</div>
-      <div class="btns">
-        <a class="btn btn-pri" href="AES_Charter.pdf" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>View</a>
-        <a class="btn btn-sec" href="AES_Charter.pdf" download><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 11l5 5 5-5"/><path d="M4 21h16"/></svg>Download PDF</a>
+      <div class="card">
+        <span class="accent" style="background:#b8860b"></span>
+        <span class="badge" style="background:#f7eed5;color:#8a6400">AES · Charter</span>
+        <h2>Assessment and Evaluation Subcommittee (AES)</h2>
+        <p>Charge, responsibilities, and voting / non-voting membership for assessment strategy and program evaluation across the MD curriculum.</p>
+        <div class="btns">
+          <a class="btn primary" href="eec-bylaws.html#appendix-d.-assessment-and-evaluation-subcommittee-aes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/></svg>View (HTML)</a>
+          <a class="btn" href="AES_Charter.pdf" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/></svg>PDF</a>
+        </div>
       </div>
+
     </div>
+    <footer>Office of Curricular Affairs · Icahn School of Medicine at Mount Sinai · ASCEND Curriculum</footer>
   </div>
-
-  <div class="foot">
-    Final authority for all curricular decisions resides with the EEC. The charters above are excerpts of the EEC Bylaws v2.0 (Appendices A–D); the full bylaws are the controlling document.<br>
-    Icahn School of Medicine at Mount Sinai · MD Program · Office of Curricular Affairs
-  </div>
-
-</div>
 </body>
 </html>

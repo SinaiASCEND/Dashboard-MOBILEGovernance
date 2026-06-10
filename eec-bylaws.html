@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EEC Bylaws v2.0 · ASCEND Curriculum · Icahn School of Medicine at Mount Sinai</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0f1e3d; --violet:#5a3fd6; --violet-deep:#3f2bb0; --violet-tint:#efecfb;
+    --cyan:#14b8d4; --magenta:#cf2592;
+    --ink:#16181d; --ink-2:#3a3f4a; --grey-7:#8a909c; --grey-11:#5b616e;
+    --grey-1:#f4f5f7; --grey-2:#e7e9ee; --grey-3:#d7dae1; --paper:#ffffff; --bg:#eef0f4;
+    --serif:"Source Serif 4", Georgia, serif;
+    --sans:"Inter Tight", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:var(--serif); line-height:1.6; }
+  .wrap { max-width:880px; margin:0 auto; padding:0 20px 80px; }
+
+  .brandbar { background:var(--navy); color:#fff; }
+  .brandbar .inner { max-width:880px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; gap:12px;
+    font-family:var(--sans); font-size:12px; letter-spacing:.06em; text-transform:uppercase; font-weight:600; }
+  .brandbar .dot { width:9px; height:9px; border-radius:2px; background:var(--magenta); }
+  .brandbar .sep { opacity:.4; }
+  .rule { height:4px; background:linear-gradient(90deg,var(--violet),var(--cyan) 60%,var(--magenta)); }
+
+  .doc { background:var(--paper); margin-top:26px; border:1px solid var(--grey-2); border-radius:14px;
+    box-shadow:0 1px 3px rgba(15,30,61,.06); padding:40px 48px 52px; }
+  .eyebrow { font-family:var(--sans); font-size:12px; letter-spacing:.10em; text-transform:uppercase;
+    color:var(--violet-deep); font-weight:700; }
+  h1.title { font-family:var(--serif); font-weight:700; font-size:32px; line-height:1.15; margin:8px 0 4px; color:var(--navy); }
+  .subtitle { font-family:var(--sans); color:var(--grey-11); font-size:14px; }
+  .verpill { display:inline-block; font-family:var(--sans); font-size:11px; font-weight:700; letter-spacing:.04em;
+    background:var(--violet-tint); color:var(--violet-deep); padding:3px 10px; border-radius:999px; margin-top:12px; }
+  .verpill.draft { background:#fff3d6; color:#8a6400; margin-left:6px; }
+
+  .status { margin:22px 0 6px; border:1px solid var(--grey-2); border-left:4px solid var(--violet); border-radius:10px;
+    background:var(--grey-1); padding:14px 18px; font-family:var(--sans); font-size:12.5px; color:var(--ink-2); }
+  .status h4 { margin:0 0 8px; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--grey-11); }
+  .status dl { margin:0; display:grid; grid-template-columns:auto 1fr; gap:3px 14px; }
+  .status dt { font-weight:600; color:var(--grey-11); }
+  .status dd { margin:0; }
+
+  nav.toc { margin:26px 0 8px; border:1px solid var(--grey-2); border-radius:10px; padding:16px 20px; background:var(--paper); }
+  nav.toc h4 { margin:0 0 10px; font-family:var(--sans); font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--violet-deep); }
+  nav.toc ol { margin:0; padding-left:20px; font-family:var(--sans); font-size:13px; columns:2; column-gap:28px; }
+  nav.toc li { margin:3px 0; break-inside:avoid; }
+  nav.toc a { color:var(--ink-2); text-decoration:none; }
+  nav.toc a:hover { color:var(--violet); text-decoration:underline; }
+
+  .content h1 { font-family:var(--serif); font-size:23px; font-weight:700; color:var(--navy);
+    margin:38px 0 14px; padding-bottom:8px; border-bottom:2px solid var(--violet); scroll-margin-top:16px; }
+  .content h2 { font-family:var(--sans); font-size:16px; font-weight:700; color:var(--ink); margin:26px 0 8px; }
+  .content h3 { font-family:var(--sans); font-size:13.5px; font-weight:700; color:var(--violet-deep);
+    letter-spacing:.01em; margin:18px 0 6px; }
+  .content p { margin:10px 0; font-size:15.5px; color:var(--ink-2); }
+  .content ul, .content ol { margin:8px 0 12px; padding-left:24px; }
+  .content li { margin:5px 0; font-size:15px; color:var(--ink-2); break-inside:avoid; }
+  .content strong { color:var(--ink); }
+  .content em { color:var(--grey-11); }
+  .content table { width:100%; border-collapse:collapse; margin:14px 0; font-family:var(--sans); font-size:13px; }
+  .content th, .content td { border:1px solid var(--grey-3); padding:9px 12px; text-align:left; vertical-align:top; }
+  .content thead th { background:var(--violet-tint); color:var(--violet-deep); }
+
+  footer.docfoot { margin-top:40px; padding-top:16px; border-top:1px solid var(--grey-2);
+    font-family:var(--sans); font-size:11.5px; color:var(--grey-7); display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  .toplink { position:fixed; right:18px; bottom:18px; font-family:var(--sans); font-size:12px; font-weight:600;
+    background:var(--navy); color:#fff; padding:9px 14px; border-radius:999px; text-decoration:none; box-shadow:0 2px 8px rgba(15,30,61,.25); }
+
+  @media (max-width:680px) { .doc { padding:26px 22px 36px; } nav.toc ol { columns:1; } h1.title { font-size:26px; } }
+  @media print {
+    body { background:#fff; } .brandbar, .toplink { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    .doc { box-shadow:none; border:0; margin-top:8px; padding:0; }
+    .toplink { display:none; } nav.toc { break-after:page; }
+    .content h1 { break-before:auto; break-after:avoid; } .content h2, .content h3 { break-after:avoid; }
+    .content table, .content tr { break-inside:avoid; }
+  }
+</style>
+</head>
+<body>
+  <div class="brandbar"><div class="inner"><span class="dot"></span>ASCEND Curriculum<span class="sep">·</span>Icahn School of Medicine at Mount Sinai</div></div>
+  <div class="rule"></div>
+  <div class="wrap">
+    <div class="doc">
+      <div class="eyebrow">MD Program · Curricular Governance</div>
+      <h1 class="title">Executive Education Committee — Bylaws</h1>
+      <div class="subtitle">Office of Curricular Affairs, Icahn School of Medicine at Mount Sinai</div>
+      <div><span class="verpill">Version 2.0</span><span class="verpill draft">Draft — pending EEC approval</span></div>
+
+      <div class="status">
+        <h4>Document Status</h4>
+        <dl>
+          <dt>Version</dt><dd>2.0</dd>
+          <dt>Status</dt><dd>Draft — pending EEC approval</dd>
+          <dt>Current version approved by the EEC in</dt><dd>2024</dd>
+          <dt>Dean for Medical Education concurrence</dt><dd>[date of Dean concurrence]</dd>
+          <dt>Effective date</dt><dd>[effective date]</dd>
+          <dt>Next scheduled review</dt><dd>[date — annual CQI cycle]</dd>
+          <dt>Document owner</dt><dd>Office of Curricular Affairs, ISMMS</dd>
+        </dl>
+      </div>
+
+      <nav class="toc">
+        <h4>Contents</h4>
+        <ol>
+        <li><a href="#article-i.-purpose-and-authority">Article I. Purpose and Authority</a></li>
+        <li><a href="#article-ii.-scope-of-oversight">Article II. Scope of Oversight</a></li>
+        <li><a href="#article-iii.-membership">Article III. Membership</a></li>
+        <li><a href="#article-iv.-meetings">Article IV. Meetings</a></li>
+        <li><a href="#article-v.-standing-subcommittees">Article V. Standing Subcommittees</a></li>
+        <li><a href="#article-vi.-subcommittee-structure-leadership-and-reporting">Article VI. Subcommittee Structure, Leadership, and Reporting</a></li>
+        <li><a href="#article-vii.-student-representation-in-governance">Article VII. Student Representation in Governance</a></li>
+        <li><a href="#article-viii.-amendments">Article VIII. Amendments</a></li>
+        <li><a href="#appendices-ad-standing-subcommittee-charges-and-membership">Appendices A–D — Standing Subcommittee Charges and Membership</a></li>
+        <li><a href="#appendix-a.-pre-clerkship-curriculum-subcommittee-pccs">Appendix A. Pre-Clerkship Curriculum Subcommittee (PCCS)</a></li>
+        <li><a href="#appendix-b.-clinical-curriculum-subcommittee-ccs">Appendix B. Clinical Curriculum Subcommittee (CCS)</a></li>
+        <li><a href="#appendix-c.-curriculum-integration-subcommittee-cis">Appendix C. Curriculum Integration Subcommittee (CIS)</a></li>
+        <li><a href="#appendix-d.-assessment-and-evaluation-subcommittee-aes">Appendix D. Assessment and Evaluation Subcommittee (AES)</a></li>
+        <li><a href="#appendix-e.-revision-log">Appendix E. Revision Log</a></li>
+        <li><a href="#relationship-of-subcommittees-to-the-executive-education-committee">Relationship of Subcommittees to the Executive Education Committee</a></li>
+        </ol>
+      </nav>
+
+      <div class="content">
+<h1 id="article-i.-purpose-and-authority">Article I. Purpose and Authority</h1>
+<h2 id="section-1.-purpose">Section 1. Purpose</h2>
+<p>The <strong>Executive Education Committee (EEC)</strong> is the principal faculty body responsible for oversight of the medical education program leading to the Doctor of Medicine (MD) degree at the Icahn School of Medicine at Mount Sinai (ISMMS).</p>
+<p>The EEC provides centralized faculty oversight of the design, management, integration, evaluation, and continuous quality improvement of the MD curriculum across all phases of the ASCEND curriculum.</p>
+<p>Through its governance responsibilities, the EEC ensures that the curriculum:</p>
+<ul>
+<li><p>aligns with the Medical Education Program Objectives (MEPOs);</p></li>
+<li><p>is coordinated and integrated within and across curricular phases;</p></li>
+<li><p>includes appropriate instructional methods and assessment strategies;</p></li>
+<li><p>is regularly evaluated using multiple sources of program data; and</p></li>
+<li><p>undergoes continuous improvement to support achievement of program outcomes.</p></li>
+</ul>
+<p>The EEC exercises authority delegated by the faculty of the medical school and reports to the Dean for Medical Education.</p>
+<h2 id="section-2.-authority">Section 2. Authority</h2>
+<p><strong>The EEC holds final authority for oversight of the MD curriculum in accordance with institutional governance policies and accreditation standards.</strong> Although operational management of the curriculum occurs within modules, clerkships, and subcommittees, final authority for curricular decisions resides with the EEC.</p>
+<p>The committee has authority to:</p>
+<ul>
+<li><p>approve the structure and content of the MD curriculum;</p></li>
+<li><p>review and approve new courses, clerkships, and curricular programs;</p></li>
+<li><p>review and approve substantive curricular revisions;</p></li>
+<li><p>oversee integration of the curriculum within and across phases;</p></li>
+<li><p>approve curricular policies related to assessment, grading, and academic standards;</p></li>
+<li><p>review program evaluation data and direct curricular improvements; and</p></li>
+<li><p>monitor educational outcomes of the medical education program.</p></li>
+</ul>
+<h2 id="section-3.-reporting-to-the-dean-for-medical-education">Section 3. Reporting to the Dean for Medical Education</h2>
+<p>The EEC submits an <strong>annual written report</strong> to the Dean for Medical Education summarizing curricular oversight activities, program evaluation findings, actions taken, and outcomes monitored during the prior academic year. The annual report is reviewed and approved by the EEC prior to submission and is retained as part of the official record of the medical education program.</p>
+<h1 id="article-ii.-scope-of-oversight">Article II. Scope of Oversight</h1>
+<h2 id="section-1.-curricular-oversight">Section 1. Curricular Oversight</h2>
+<p>The EEC oversees the entire MD curriculum, including all educational experiences that contribute to achievement of the Medical Education Program Objectives. This includes oversight of:</p>
+<ul>
+<li><p>foundational science instruction;</p></li>
+<li><p>clinical education;</p></li>
+<li><p>longitudinal curricular domains;</p></li>
+<li><p>scholarly activities;</p></li>
+<li><p>electives and acting internships;</p></li>
+<li><p>assessment and grading practices; and</p></li>
+<li><p>program evaluation and outcomes monitoring.</p></li>
+</ul>
+<p>The EEC ensures that these components are appropriately coordinated and integrated across the curriculum.</p>
+<h2 id="section-2.-continuous-quality-improvement">Section 2. Continuous Quality Improvement</h2>
+<p>The EEC oversees continuous quality improvement (CQI) processes for the MD program. Sources of data used in curriculum evaluation include:</p>
+<ul>
+<li><p>course and clerkship evaluations;</p></li>
+<li><p>student performance and progression data;</p></li>
+<li><p>national licensing examination outcomes;</p></li>
+<li><p>Independent Student Analysis findings;</p></li>
+<li><p>AAMC Graduation Questionnaire data; and</p></li>
+<li><p>accreditation reviews and internal program evaluations.</p></li>
+</ul>
+<p>The committee reviews these data to identify curricular strengths, gaps, redundancies, and opportunities for improvement, and directs corrective action when warranted.</p>
+<h2 id="section-3.-closed-loop-monitoring-of-curricular-actions">Section 3. Closed-Loop Monitoring of Curricular Actions</h2>
+<p>When the EEC approves a curricular action in response to program evaluation data, student performance data, or accreditation findings, the EEC shall:</p>
+<ul>
+<li><p>document the specific outcome the action is intended to address;</p></li>
+<li><p>assign responsibility for implementation to a named subcommittee, module director, clerkship director, or office;</p></li>
+<li><p>establish a <strong>follow-up review date</strong>, which shall <strong>not exceed twelve (12) months</strong> from the date of approval; and</p></li>
+<li><p>on or before the follow-up review date, evaluate whether the action achieved its intended outcome and determine whether the matter is resolved, requires modification, or warrants additional action.</p></li>
+</ul>
+<p>The follow-up review and its determination shall be recorded in the minutes of the meeting at which the review occurs.</p>
+<h1 id="article-iii.-membership">Article III. Membership</h1>
+<h2 id="section-1.-committee-leadership">Section 1. Committee Leadership</h2>
+<p>The EEC is co-chaired by:</p>
+<ul>
+<li><p>a <strong>Faculty Co-Chair</strong>, who is a voting member of the committee; and</p></li>
+<li><p>the Senior Associate Dean for Curricular Affairs, who serves as <strong>Administrative Co-Chair</strong> and is a non-voting member.</p></li>
+</ul>
+<p>The Faculty Co-Chair presides over meetings and ensures that decisions of the committee are documented. The Senior Associate Dean for Curricular Affairs provides administrative leadership and operational coordination for the curriculum but does not vote, ensuring that authority for curricular decision-making remains with the faculty.</p>
+<h2 id="section-2.-voting-members">Section 2. Voting Members</h2>
+<p>The voting membership of the EEC consists of the following thirteen (13) seats:</p>
+<ul>
+<li><p><strong>Faculty Co-Chair</strong> (1 seat);</p></li>
+<li><p><strong>Faculty-at-Large</strong>** representatives** (8 seats); and</p></li>
+<li><p><strong>Medical student representatives</strong> (4 seats: one each from Phase 1, Phase 2, Phase 3, and the Medical Scientist Training Program).</p></li>
+</ul>
+<p>For purposes of these bylaws, a “Faculty-at-Large representative” is a faculty member who, at the time of appointment and throughout the term of service, does not hold a senior curricular leadership role, including Module Director, Course Director, Clerkship Director, or Acting Internship Director. This independence requirement ensures that Faculty-at-Large members provide objective review of curricular quality and represent perspectives distinct from those of faculty directly responsible for delivering courses, clerkships, or acting internships.</p>
+<h2 id="section-3.-non-voting-members">Section 3. Non-Voting Members</h2>
+<p>The following positions hold eleven (11) <strong>non-voting</strong> seats on the EEC:</p>
+<ul>
+<li><p>Administrative Co-Chair (Senior Associate Dean for Curricular Affairs);</p></li>
+<li><p>Faculty Co-Chair, Pre-Clerkship Curriculum Subcommittee (PCCS);</p></li>
+<li><p>Faculty Co-Chair, Clinical Curriculum Subcommittee (CCS);</p></li>
+<li><p>Faculty Co-Chair, Curriculum Integration Subcommittee (CIS);</p></li>
+<li><p>Faculty Co-Chair, Assessment and Evaluation Subcommittee (AES);</p></li>
+<li><p>Module Director Representative;</p></li>
+<li><p>Clerkship Director Representative;</p></li>
+<li><p>Clinical Competency Mentor;</p></li>
+<li><p>MSTP Program Representative;</p></li>
+<li><p>Career and Professional Development Advisor; and</p></li>
+<li><p>Specialty Advisor.</p></li>
+</ul>
+<p>Non-voting members participate in committee deliberations and provide expertise, operational context, or representation of relevant constituencies. <strong>Non-voting members do not cast votes and do not count toward quorum.</strong> The subcommittee Faculty Co-Chairs serve in this capacity to ensure regular communication between the standing subcommittees and the EEC and to present subcommittee reports and recommendations.</p>
+<h2 id="section-4.-guests">Section 4. Guests</h2>
+<p>Either the Faculty Co-Chair or the Administrative Co-Chair may invite one or more guests to attend any meeting of the EEC. Guests are invited based on a combination of their institutional role and the relevance of their expertise or perspective to specific matters on the meeting agenda.</p>
+<p>Guests are not members of the committee. Guests do not hold voting rights, do not count toward quorum, and are not subject to the appointment, term, or removal provisions applicable to members. Guests may participate in discussion at the discretion of the presiding co-chair.</p>
+<h2 id="section-5.-appointment-terms-and-vacancies">Section 5. Appointment, Terms, and Vacancies</h2>
+<h3 id="appointment.">5.1 Appointment.</h3>
+<ul>
+<li><p>The <strong>Faculty Co-Chair</strong> and <strong>Faculty-at-Large</strong> representatives are appointed by the Dean for Medical Education on the recommendation of the Faculty Council at the Icahn School of Medicine at Mount Sinai.</p></li>
+<li><p><strong>Subcommittee Faculty Co-Chairs</strong> are appointed by the Dean for Medical Education on the recommendation of the EEC Faculty Co-Chair, with concurrence of the EEC by majority vote.</p></li>
+<li><p><strong>Module Director</strong> and <strong>Clerkship Director Representatives</strong> are selected by majority vote of the eligible directors in their respective groups, conducted under the auspices of the Office of Curricular, and confirmed by the Dean for Medical Education.</p></li>
+<li><p>The <strong>Clinical Competency Mentor, MSTP Program Representative, Career and Professional Development Advisor</strong>, and <strong>Specialty Advisor</strong> seats are filled by virtue of holding the corresponding institutional role; where the institutional role is held in an interim or acting capacity, the interim or acting officeholder may serve in the seat for the duration of the interim appointment.</p></li>
+<li><p><strong>Student representatives</strong> are elected by the student body through elections administered by the <strong>Student Advisory Group (SAG).</strong> The Office of Student Affairs supports SAG in the conduct of elections, including outreach, scheduling, and verification of candidate eligibility, but does not direct candidate selection or election outcomes. The Office of Curricular Affairs supports onboarding of newly elected student representatives but plays no role in their selection. Where the MSTP seat on the EEC is vacant such that no current MSTP representative is available to participate in SAG’s election function, SAG conducts the election in coordination with the MSTP student community.</p></li>
+</ul>
+<h3 id="term-length.">5.2 Term Length.</h3>
+<p>All non-student members of the EEC serve <strong>three-year terms</strong>. Where multiple seats of the same type exist (for example, Faculty-at-Large representatives), terms are staggered so that approximately one-third of the seats in that group turn over each academic year. Where staggering within a single seat type is not practicable, terms are coordinated across seat types so that EEC turnover overall is approximately one-third per year.</p>
+<p>A seat that requires the holder to occupy a designated institutional role or category of role is held subject to the holder continuously satisfying that requirement throughout the three-year term. Specifically:</p>
+<ul>
+<li><p>the Module Director Representative must continuously hold a Module Director appointment;</p></li>
+<li><p>the Clerkship Director Representative must continuously hold a Clerkship Director appointment;</p></li>
+<li><p>the Clinical Competency Mentor, MSTP Program Representative, Career and Professional Development Advisor, and Specialty Advisor seats are held subject to the appointee continuing in the corresponding institutional role; and</p></li>
+<li><p>subcommittee Faculty Co-Chair seats on the EEC are held subject to continuing service as Faculty Co-Chair of the corresponding subcommittee.</p></li>
+</ul>
+<p>Departure from the underlying role at any point during the three-year term creates a vacancy in the seat, which is filled through the appointment process applicable to that seat under Section 5.1. The replacement appointee serves the remainder of the unexpired term, subject to the renewal limits in Section 5.3.</p>
+<p><strong>Student representatives serve for as long as they continue to fulfill the phase requirement of their seat (Phase 1, Phase 2, Phase 3, or MSTP).</strong> Transition out of the relevant phase or program creates a vacancy in the seat.</p>
+<h3 id="renewal.">5.3 Renewal.</h3>
+<p>A non-student member may serve up to <strong>two consecutive three-year terms in the same seat.</strong> After a break in service of at least one year, a faculty member may again be appointed. Student representatives are not subject to a fixed term limit but cease to serve upon transition out of the phase or program represented by their seat.</p>
+<h3 id="vacancies.">5.4 Vacancies.</h3>
+<p>A vacancy occurs upon resignation, departure from the institution, change in role that disqualifies the member from the seat, or removal under Section 5.5. Vacancies are filled through the appointment process applicable to the seat. A member appointed to fill a vacancy serves the remainder of the unexpired term, which is not counted toward the term limit if less than eighteen (18) months remain.</p>
+<h3 id="removal.">5.5 Removal.</h3>
+<p>A voting member may be removed for cause, including failure to attend at least two-thirds of regularly scheduled meetings in an academic year, conduct inconsistent with the responsibilities of the committee, or change in role that creates an unresolved conflict of interest. Removal requires a two-thirds vote of voting members present at a meeting at which removal is a noticed agenda item, and concurrence of the Dean for Medical Education.</p>
+<h2 id="section-6.-conflicts-of-interest-and-recusal">Section 6. Conflicts of Interest and Recusal</h2>
+<p>A voting member shall recuse themselves from voting on, and shall not participate in deliberation of, any matter in which the member has a direct conflict of interest. A direct conflict of interest exists when:</p>
+<ul>
+<li><p>the matter under consideration is the approval, modification, evaluation, or review of a course, clerkship, module, or program for which the member serves as director, co-director, or holds equivalent operational leadership;</p></li>
+<li><p>the matter concerns the assessment outcomes, grading practices, or evaluation results of such a course, clerkship, module, or program; or</p></li>
+<li><p>the matter concerns the member personally, including matters affecting the member’s compensation, appointment, or scope of role.</p></li>
+</ul>
+<p>A recused member may, at the request of the committee, present factual information or respond to questions, but shall not be present during deliberation or voting on the matter. Recusals shall be recorded in the minutes. The Faculty Co-Chair shall determine whether a conflict exists in cases of uncertainty; the Faculty Co-Chair’s own conflicts shall be determined by the Senior Associate Dean for Curricular Affairs in consultation with the committee.</p>
+<h1 id="article-iv.-meetings">Article IV. Meetings</h1>
+<h2 id="section-1.-meeting-frequency">Section 1. Meeting Frequency</h2>
+<p>The EEC meets <strong>no fewer than ten (10) times per academic year</strong>, ordinarily on a monthly schedule between August and June. Meetings may be held in person, by videoconference, or in hybrid format. The Faculty Co-Chair may convene special meetings to address time-sensitive curricular matters with no fewer than seventy-two (72) hours’ advance notice to voting members.</p>
+<h2 id="section-2.-quorum">Section 2. Quorum</h2>
+<p>A quorum consists of a <strong>majority of the appointed voting seats</strong> (that is, <strong>seven of thirteen seats</strong> when all seats are filled). A quorum must be present to conduct official business or take any vote. If quorum fails at a regularly scheduled meeting, the meeting may proceed for discussion and information purposes, but no votes may be taken; matters requiring action shall be deferred to a meeting at which quorum is present, which shall be scheduled within thirty (30) days.</p>
+<h2 id="section-3.-voting-procedures">Section 3. Voting Procedures</h2>
+<h3 id="standard-vote.">3.1 Standard Vote.</h3>
+<p><strong>Each voting member has one vote.</strong> Approval of a motion requires an affirmative vote of a majority of voting members present and voting. Abstentions are recorded but are not counted as votes cast for purposes of determining a majority.</p>
+<h3 id="tie-votes.">3.2 Tie Votes.</h3>
+<p>In the event of a tie, the motion fails. The Faculty Co-Chair <strong>does not have a tie-breaking vote</strong> separate from the Faculty Co-Chair’s standard vote as a voting member.</p>
+<h3 id="proxy-voting.">3.3 Proxy Voting.</h3>
+<p><strong>Proxy voting is not permitted.</strong> A voting member must be present at the meeting (in person or by videoconference) at the time of the vote in order to cast a vote on a matter.</p>
+<h3 id="asynchronous-and-electronic-voting.">3.4 Asynchronous and Electronic Voting.</h3>
+<p>Between regularly scheduled meetings, the Faculty Co-Chair may submit a clearly stated motion to voting members for an <strong>electronic vote</strong> when the matter is time-sensitive and a special meeting is impractical. An electronic vote requires a response window of no fewer than five (5) business days. <strong>Approval requires an affirmative vote of a majority of all appointed voting members (that is, seven of thirteen when all seats are filled), not merely of those responding.</strong> Electronic votes shall be ratified at the next regularly scheduled meeting and recorded in the minutes of that meeting.</p>
+<h3 id="documentation.">3.5 Documentation.</h3>
+<p>All motions, votes, and recusals shall be documented in the minutes, including the count of affirmative, negative, and abstaining votes for any contested motion.</p>
+<h1 id="article-v.-standing-subcommittees">Article V. Standing Subcommittees</h1>
+<h2 id="section-1.-establishment-of-subcommittees">Section 1. Establishment of Subcommittees</h2>
+<p>The EEC establishes the following standing subcommittees to assist with oversight of specific components of the MD curriculum:</p>
+<ul>
+<li><p><strong>Pre-Clerkship Curriculum Subcommittee (PCCS);</strong></p></li>
+<li><p><strong>Clinical Curriculum Subcommittee (CCS);</strong></p></li>
+<li><p><strong>Curriculum Integration Subcommittee (CIS); and</strong></p></li>
+<li><p><strong>Assessment and Evaluation Subcommittee (AES).</strong></p></li>
+</ul>
+<p>Standing subcommittees review curricular data and operational matters within their scope and provide recommendations to the EEC. The composition of each standing subcommittee is set forth in Appendices A through D.</p>
+<h2 id="section-2.-ad-hoc-committees-and-working-groups">Section 2. Ad Hoc Committees and Working Groups</h2>
+<p>The EEC may establish ad hoc committees or working groups by majority vote to address specific curricular matters of limited scope or duration. The motion to establish an ad hoc body shall specify its charge, membership, reporting timeline, and date of dissolution (which shall not exceed twenty-four (24) months without renewal by EEC vote). Ad hoc bodies report directly to the EEC and have no independent decision-making authority.</p>
+<h1 id="article-vi.-subcommittee-structure-leadership-and-reporting">Article VI. Subcommittee Structure, Leadership, and Reporting</h1>
+<h2 id="section-1.-role-of-standing-subcommittees">Section 1. Role of Standing Subcommittees</h2>
+<p>Standing subcommittees support the oversight, monitoring, and continuous quality improvement of the medical education program. Subcommittees review specific components of the curriculum and provide recommendations to the EEC regarding curricular design, implementation, integration, assessment, and program evaluation.</p>
+<p>Subcommittees serve an advisory and operational role and function within the authority delegated by the EEC. Subcommittees review curricular data, including course and clerkship evaluations, student performance metrics, national benchmarking data, and other program evaluation information. Based on these reviews, subcommittees identify opportunities for curricular improvement and present recommendations to the EEC for consideration.</p>
+<p><strong>Final authority for all curricular decisions resides with the EEC.</strong> The EEC reviews recommendations presented by subcommittees and determines whether to approve, modify, defer, or reject proposed curricular changes.</p>
+<h2 id="section-2.-leadership-of-standing-subcommittees">Section 2. Leadership of Standing Subcommittees</h2>
+<p>Each standing subcommittee is co-led by a Faculty Co-Chair, responsible for academic leadership and curricular oversight, and an Administrative Co-Chair, responsible for operational coordination and implementation.</p>
+<h3 id="faculty-co-chair.">2.1 Faculty Co-Chair.</h3>
+<p>The <strong>Faculty Co-Chair</strong> of each standing subcommittee:</p>
+<ul>
+<li><p>presides over meetings of the subcommittee;</p></li>
+<li><p>guides discussions related to curricular design, content integration, assessment practices, and program outcomes;</p></li>
+<li><p>ensures that relevant curricular data are reviewed and interpreted by the subcommittee;</p></li>
+<li><p>facilitates development of recommendations for curricular improvement;</p></li>
+<li><p>represents the subcommittee in communications with the EEC;</p></li>
+<li><p>presents subcommittee reports and recommendations to the EEC; and</p></li>
+<li><p>communicates EEC decisions to the subcommittee and facilitates implementation of approved curricular changes.</p></li>
+</ul>
+<p>The Faculty Co-Chair of each standing subcommittee holds a non-voting seat on the EEC, as provided in Article III, Section 3, in order to ensure regular communication between the subcommittee and the EEC and to present subcommittee work for the EEC’s consideration. The Faculty Co-Chair retains full voting rights within the subcommittee they lead.</p>
+<h3 id="administrative-co-chair.">2.2 Administrative Co-Chair.</h3>
+<p>The <strong>Administrative Co-Chair</strong> of each standing subcommittee:</p>
+<ul>
+<li><p>coordinates scheduling and logistics of subcommittee meetings;</p></li>
+<li><p>prepares meeting agendas and supporting documentation in collaboration with the Faculty Co-Chair;</p></li>
+<li><p>collects and organizes relevant curricular data and evaluation materials for committee review;</p></li>
+<li><p>facilitates communication with course directors, clerkship directors, faculty, and administrative units involved in curriculum implementation;</p></li>
+<li><p>supports implementation of curricular changes approved by the EEC; and</p></li>
+<li><p>assists with documentation of committee discussions and decisions.</p></li>
+</ul>
+<p>Administrative Co-Chairs may attend EEC meetings to provide operational context. Administrative Co-Chairs do not hold seats on the EEC by virtue of their subcommittee role.</p>
+<h2 id="section-3.-subcommittee-member-terms">Section 3. Subcommittee Member Terms</h2>
+<p>All non-student voting and non-voting members of a standing subcommittee serve <strong>three-year terms</strong>, with terms staggered to the extent practicable so that approximately one-third of seats turn over each academic year. Where a seat is filled by virtue of holding a designated institutional role, the appointee’s term is held subject to continuing tenure in that role. A member may serve up to <strong>two consecutive three-year terms in the same seat</strong>, with reappointment available after a break in service of at least one year. Student representatives on a standing subcommittee serve for as long as they continue to fulfill the phase requirement of their seat; transition out of that phase creates a vacancy.</p>
+<h2 id="section-4.-subcommittee-meetings-quorum-and-voting">Section 4. Subcommittee Meetings, Quorum, and Voting</h2>
+<p>Each standing subcommittee <strong>meets no fewer than ten</strong>** (****10****) times per academic year**, usually monthly. A quorum of a standing subcommittee consists of a majority of its appointed voting members. Subcommittee recommendations advanced to the EEC require an affirmative vote of a majority of voting members present and voting at a meeting at which a quorum is present. The recusal provisions of Article III, Section 6 apply to subcommittee deliberations and votes. Where the same individual occupies more than one voting seat on a subcommittee, that individual exercises a single vote regardless of the number of seats held.</p>
+<h2 id="section-5.-guests-at-subcommittee-meetings">Section 5. Guests at Subcommittee Meetings</h2>
+<p>Either the Faculty Co-Chair or the Administrative Co-Chair of a standing subcommittee may invite guests to attend any meeting of the subcommittee. Guests are invited based on a combination of their institutional role and the relevance of their expertise or perspective to specific matters on the meeting agenda. Guests are not members of the subcommittee, do not hold voting rights, and do not count toward quorum.</p>
+<h2 id="section-6.-presentation-of-subcommittee-reports-and-recommendations">Section 6. Presentation of Subcommittee Reports and Recommendations</h2>
+<p>Standing subcommittees report to the EEC on a schedule established by the EEC, and not less than once per academic year. Reports include summaries of evaluation findings, analysis of student performance data, identification of curricular gaps or redundancies, and recommendations for curricular improvement.</p>
+<p>Recommendations are introduced to the EEC by the Faculty Co-Chair of the subcommittee. The Administrative Co-Chair may present operational details, supporting data, or background information related to the proposal. Following presentation, the EEC deliberates and determines whether to approve, modify, defer, or reject the proposal in accordance with the voting procedures of Article IV.</p>
+<h2 id="section-7.-documentation-of-subcommittee-and-eec-actions">Section 7. Documentation of Subcommittee and EEC Actions</h2>
+<p><strong>Meeting minutes</strong> for both subcommittees and the EEC are <strong>maintained by the Office of Curricular Affairs</strong>. Minutes shall document, at minimum:</p>
+<ul>
+<li><p>the date of the meeting and the members present, absent, and recused;</p></li>
+<li><p>topics reviewed and data or reports considered;</p></li>
+<li><p>the text of motions made and the count of affirmative, negative, and abstaining votes;</p></li>
+<li><p>decisions made by the committee;</p></li>
+<li><p>responsibilities and timelines assigned for implementation; and</p></li>
+<li><p>follow-up review dates established under Article II, Section 3.</p></li>
+</ul>
+<p>Draft minutes shall be circulated to voting members within fourteen (14) days of the meeting and approved at the next regularly scheduled meeting. Approved minutes are retained as part of the official record of the medical education program.</p>
+<h2 id="section-8.-confidentiality-of-student-specific-information">Section 8. Confidentiality of Student-Specific Information</h2>
+<p>When the EEC or any subcommittee reviews data or matters that include student-specific information, members and guests shall treat such information as confidential and shall use it solely for the purpose of curricular oversight and continuous quality improvement. Student-specific information shall not be retained by individual members or guests outside of materials provided through the Office of Curricular Affairs and shall not be disclosed outside of the committee except as required by institutional policy or law.</p>
+<h1 id="article-vii.-student-representation-in-governance">Article VII. Student Representation in Governance</h1>
+<h2 id="section-1.-purpose-and-principles">Section 1. Purpose and Principles</h2>
+<p>The medical education program is structured around the learning experience of medical students. Meaningful student involvement in curricular governance is therefore essential to ensure that decisions about the curriculum reflect the perspectives of those whose education is being designed and delivered.</p>
+<p>Student representatives serve as <strong>full voting members</strong> of the EEC and of each standing subcommittee on which they sit, with the same rights, responsibilities, and expectations as faculty members. Student input is sought not only on matters that bear directly on student experience but on the full range of curricular oversight conducted by these committees, including curriculum design, assessment, integration, and program evaluation.</p>
+<p>A student elected to a seat on the EEC or on a standing subcommittee may not concurrently hold a second voting seat on another EEC body. This rule preserves balanced representation across the governance structure and ensures that no individual student bears disproportionate committee load.</p>
+<h2 id="section-2.-student-roles-by-committee">Section 2. Student Roles by Committee</h2>
+<p>The composition of student representation, the rationale for that composition, and the expected contributions of student representatives on each committee are as follows.</p>
+<h3 id="executive-education-committee-eec.">2.1 Executive Education Committee (EEC).</h3>
+<p><strong>Four student representatives serve on the EEC: one from Phase 1, one from Phase 2, one from Phase 3, and one from the Medical Scientist Training Program (MSTP).</strong> This composition ensures representation across the entire MD curriculum and from both the conventional MD and MD-PhD pathways.</p>
+<p>Student representatives on the EEC are expected to contribute to discussion of program-level issues such as cross-phase coherence, transitions between phases, assessment policy, accreditation matters, and program outcomes data, and to convey the perspectives of their peers on matters before the committee.</p>
+<p>Each phase-specific seat is held by a student currently in that phase; the seat is vacated when the holder transitions out of the phase. <strong>Approximate tenure: ~18 months for the Phase 1 seat, ~12 months for the Phase 2 seat, and ~18 months for the Phase 3 seat (vacated at graduation).</strong></p>
+<p>Continuity at phase transitions: when a student holding a phase-specific EEC seat transitions to the next phase, that student automatically continues service in the corresponding seat for the new phase, without re-election. The seat the student vacated by virtue of phase transition is filled through the regular selection process. A single student may, in principle, serve continuously across all three phase-specific EEC seats from M1 fall through graduation. During the brief overlap of a phase transition, two students may temporarily represent the same phase on the EEC; this is acceptable.</p>
+<p>MSTP seat: held by an MSTP student who is currently in an MD phase of training. When the holder enters the PhD phase of training, the seat is vacated and may be filled by another MSTP student then in an MD phase. An MSTP student who completes the PhD and returns to an MD phase is eligible to be elected to the MSTP seat through the regular selection process; re-entry to the seat after a PhD interruption is not automatic.</p>
+<h3 id="pre-clerkship-curriculum-subcommittee-pccs.">2.2 Pre-Clerkship Curriculum Subcommittee (PCCS).</h3>
+<p><strong>Two student representatives drawn from Phase 1 serve on the PCCS.</strong> These students are currently engaged in the pre-clerkship curriculum and are positioned to provide real-time perspective on the curriculum as it is being delivered.</p>
+<p>Expected contributions include perspective on module design, content sequencing and integration, assessment burden and scheduling, the learning environment, the experience of foundational science instruction, and the early clinical learning experiences within Phase 1.</p>
+<p>Each PCCS student seat is held by a Phase 1 student and is vacated when the holder transitions to Phase 2. <strong>Approximate tenure:</strong> <strong>up to 18 months.</strong> Both seats typically turn over together at the Phase 1–Phase 2 transition. Migration to a different phase’s seat is not available on PCCS, as PCCS seats are restricted to Phase 1 students; a student transitioning out of Phase 1 vacates the seat and may, if desired, run for a different committee that is appropriate to their new phase.</p>
+<h3 id="clinical-curriculum-subcommittee-ccs.">2.3 Clinical Curriculum Subcommittee (CCS).</h3>
+<p><strong>Two student representatives serve on the CCS.</strong> Each seat is filled by a student elected upon entering Phase 2, who continues to serve through Phase 3 to graduation. This continuity preserves longitudinal perspective on clinical training across both clinical phases. Students currently in Phase 3 may also be elected to a CCS seat if a vacancy arises mid-cycle.</p>
+<p>Expected contributions include perspective on the comparability of clinical learning experiences across sites, the quality and consistency of clinical supervision, the fairness and reliability of clerkship assessment and grading, the integration of clinical and foundational science content during the clinical phases, and the readiness of clinical experiences to prepare students for residency training.</p>
+<p><strong>Approximate tenure:</strong> <strong>up to 30 months</strong> (the duration of Phase 2 plus Phase 3). Each seat is vacated at graduation.</p>
+<h3 id="curriculum-integration-subcommittee-cis.">2.4 Curriculum Integration Subcommittee (CIS).</h3>
+<p><strong>Three student representatives serve on the CIS.</strong> CIS seats are open to students in any active MD phase, in recognition that integration of the curriculum is best evaluated by students currently experiencing it longitudinally. Seats are intentionally staggered across phases where possible so that the committee benefits from perspective on multiple points in the curriculum at once.</p>
+<p>Expected contributions include perspective on whether foundational learning prepared students for subsequent clinical work, how longitudinal threads and Areas of Concentration unfold across the curriculum, where integration gaps or redundancies exist, and the experience of curricular handoffs between phases.</p>
+<p><strong>Approximate tenure</strong> varies depending on the phase of the holder at the time of election; in practice, CIS holders typically serve through graduation. Each seat is vacated at graduation or upon the holder’s departure from active MD-program training.</p>
+<h3 id="assessment-and-evaluation-subcommittee-aes.">2.5 Assessment and Evaluation Subcommittee (AES).</h3>
+<p><strong>Six student representatives serve on the AES, distributed two from each phase:</strong> two Phase 1 students, two Phase 2 students, and two Phase 3 students. This distribution reflects the breadth of student experience with assessment across the curriculum and ensures that the committee’s student voice is balanced across the full arc of training.</p>
+<p>Expected contributions include perspective on the validity and fairness of assessment methods, the timeliness and clarity of feedback to learners, the balance of formative and summative assessment, the alignment of assessment practices with the Medical Education Program Objectives, and the experience of progression and remediation processes from the student perspective.</p>
+<p>Each AES student seat is vacated when the holder transitions out of the phase represented by the seat. <strong>Approximate tenure</strong> mirrors the duration of the relevant phase: ~18 months (Phase 1), ~12 months (Phase 2), and ~18 months (Phase 3, vacated at graduation). Pairs of seats within the same phase typically turn over together at phase transitions.</p>
+<p>Continuity at phase transitions: when a student holding an AES phase-specific seat transitions to the next phase, that student automatically continues service in a corresponding AES seat for the new phase, without re-election. The Phase 1 seat the student vacated is filled through the regular selection process so that Phase 1 representation on AES is preserved. A single student may, in principle, serve continuously across all three phase-specific AES seats from M1 fall through graduation.</p>
+<h2 id="section-3.-selection-onboarding-and-conduct">Section 3. Selection, Onboarding, and Conduct</h2>
+<p>Student representatives are selected through the established process of the Student Advisory Group leadership in coordination with elected student leadership and the Office of Curricular Affairs, with attention to ensuring representation across phases, programs, and student backgrounds.</p>
+<p>Newly selected student representatives shall receive an orientation to the role, including a review of these bylaws, the expectations of committee membership, principles of confidentiality, an overview of the committee’s charge and recent work, and an introduction to ongoing curricular and accreditation matters before the committee.</p>
+<p>Student representatives are subject to the same expectations of conflict-of-interest disclosure, recusal, and professional conduct as all other members of the committees on which they serve, in accordance with Article III, Section 6. Student representatives shall maintain confidentiality with respect to student-specific information, faculty performance information, and pre-decisional deliberations of the committees, consistent with Article VI, Section 8 and institutional policy.</p>
+<h2 id="section-4.-tenure-of-student-representatives">Section 4. Tenure of Student Representatives</h2>
+<p>The tenure of student representatives is governed by Article III, Section 5.2 (for the EEC) and Article VI, Section 3 (for standing subcommittees): a student representative continues to serve so long as the student fulfills the phase or program requirement of the seat. Transition out of the relevant phase or program creates a vacancy, which is filled through the selection process described in Section 3 of this Article.</p>
+<h2 id="section-5.-support-for-effective-student-participation">Section 5. Support for Effective Student Participation</h2>
+<p>To enable effective student participation, the Office of Curricular Affairs shall provide student representatives with timely access to meeting agendas, supporting materials, and prior minutes; reasonable accommodations for academic schedules in the timing of meetings where practicable; and a designated point of contact for procedural questions. Student representatives are encouraged to consult with peers, where appropriate and consistent with confidentiality obligations, to bring informed perspectives to committee deliberations.</p>
+<h2 id="section-6.-student-advisory-group-sag">Section 6. Student Advisory Group (SAG)</h2>
+<p>The <strong>Student Advisory Group (SAG)</strong> is the collective name for all student representatives serving in MD curriculum governance, including the four student representatives on the EEC and all student representatives serving on the standing subcommittees. SAG is not a separate committee. SAG does not hold separate meetings, conduct formal votes, maintain minutes, or operate under a separate charge.</p>
+<p><strong>The four EEC Student Representatives lead SAG.</strong> In this leadership capacity they:</p>
+<ul>
+<li><p>coordinate communication among student representatives across the EEC and the standing subcommittees;</p></li>
+<li><p>support the Student Advisory Group leadership in coordination with elected student leadership and the Office of Curricular Affairs in identifying, recruiting, and confirming student representatives so that complete student representation is maintained across all committees;</p></li>
+<li><p>maintain regular communication with the elected Student Council and the broader student body regarding curricular governance matters; and</p></li>
+<li><p>bring concerns or themes raised by student representatives forward to the EEC Co-Chairs for consideration.</p></li>
+</ul>
+<p><strong>SAG is accountable to the Faculty Co-Chair and the Administrative Co-Chair of the EEC.</strong> The EEC Co-Chairs may convene SAG, in whole or in part, on an as-needed basis to address matters affecting student representation in governance. The work of SAG and matters raised through SAG are documented, where appropriate, in the minutes of the EEC or of the standing subcommittees on which student representatives serve.</p>
+<h1 id="article-viii.-amendments">Article VIII. Amendments</h1>
+<h2 id="section-1.-proposal-of-amendments">Section 1. Proposal of Amendments</h2>
+<p><strong>Any voting member of the EEC, the Senior Associate Dean for Curricular Affairs, or the Dean for Medical Education may propose an amendment to these bylaws.</strong> A proposed amendment shall be submitted in writing to the Faculty Co-Chair, who shall distribute the proposed text to all voting members no fewer than fourteen (14) days before the meeting at which it will be considered.</p>
+<h2 id="section-2.-approval-of-amendments">Section 2. Approval of Amendments</h2>
+<p>Amendments to these bylaws require an affirmative vote of two-thirds of the appointed voting members of the EEC (nine of thirteen seats when all seats are filled), and concurrence of the Dean for Medical Education.</p>
+<h2 id="section-3.-effective-date">Section 3. Effective Date</h2>
+<p>Approved amendments take effect <strong>thirty (30) days after concurrence</strong> by the Dean for Medical Education, unless the approving motion specifies a different effective date. The current version of the bylaws, with effective dates of all amendments, shall be maintained by the Office of Curricular Affairs.</p>
+<h2 id="section-4.-periodic-review">Section 4. Periodic Review</h2>
+<p>These bylaws shall be reviewed <strong>at least annually</strong> as part of the EEC’s continuous quality improvement (CQI) process for curricular governance. The annual review evaluates whether the bylaws continue to support effective faculty oversight of the curriculum, alignment with institutional governance policies, and compliance with applicable accreditation standards. Findings of the annual review, including any recommended amendments, shall be documented in the minutes of the EEC. Amendments arising from the annual review are processed in accordance with Sections 1 through 3 of this Article. The completion of an annual review without resulting amendments does not require a new version of the bylaws to be issued but shall be recorded in the minutes of the EEC.</p>
+<h1 id="appendices-ad-standing-subcommittee-charges-and-membership">Appendices A–D — Standing Subcommittee Charges and Membership</h1>
+<p>Standing subcommittees support the EEC in fulfilling its responsibility for oversight of the MD curriculum. Subcommittees review curricular implementation and program evaluation data within their areas of responsibility and develop recommendations for curricular improvement. Final authority for curricular decisions resides with the EEC.</p>
+<p>Each subcommittee is co-led by a Faculty Co-Chair, responsible for academic oversight, and an Administrative Co-Chair, responsible for operational coordination. The voting and quorum rules of Article VI, Section 3 apply to all subcommittees. Where the same individual occupies more than one voting seat on a subcommittee, that individual exercises a single vote.</p>
+<h1 id="appendix-a.-pre-clerkship-curriculum-subcommittee-pccs">Appendix A. Pre-Clerkship Curriculum Subcommittee (PCCS)</h1>
+<h2 id="purpose">Purpose</h2>
+<p>The PCCS oversees the design, implementation, integration, and evaluation of the pre-clerkship phase (Phase 1) of the MD curriculum. The committee ensures that foundational science education and early clinical learning experiences are appropriately integrated and aligned with the Medical Education Program Objectives.</p>
+<h2 id="responsibilities">Responsibilities</h2>
+<ul>
+<li><p>reviews the structure and implementation of Phase 1 modules;</p></li>
+<li><p>monitors alignment of module objectives with the Medical Education Program Objectives;</p></li>
+<li><p>reviews module evaluation data and student performance outcomes;</p></li>
+<li><p>identifies gaps, redundancies, or integration opportunities within the pre-clerkship curriculum;</p></li>
+<li><p>monitors assessment strategies and grading practices used in Phase 1;</p></li>
+<li><p>reviews trends in student performance and progression during the pre-clerkship phase; and</p></li>
+<li><p>develops recommendations for curricular improvement and submits them to the EEC.</p></li>
+</ul>
+<h2 id="voting-members-25-seats">Voting Members (25 seats)</h2>
+<ul>
+<li><p>Faculty Co-Chair (1 seat);</p></li>
+<li><p>Phase 1 Module Directors (22 seats); and</p></li>
+<li><p>Student Representatives, Phase 1 (2 seats).</p></li>
+</ul>
+<p><em>Note: When the same individual holds the Faculty Co-Chair seat and a Phase 1 Module Director seat, both seats remain structurally allocated so that the Module Director seat is not lost upon transition out of the Faculty Co-Chair role; however, the individual exercises a single vote.</em></p>
+<h2 id="non-voting-members-5-seats">Non-Voting Members (5 seats)</h2>
+<ul>
+<li><p>Administrative Co-Chair;</p></li>
+<li><p>Director of Clinical Competency;</p></li>
+<li><p>Director of Clinical Curriculum;</p></li>
+<li><p>Office of Assessment &amp; Evaluation Representative; and</p></li>
+<li><p>Director of Integration and Transitions Phase.</p></li>
+</ul>
+<h1 id="appendix-b.-clinical-curriculum-subcommittee-ccs">Appendix B. Clinical Curriculum Subcommittee (CCS)</h1>
+<h2 id="purpose-1">Purpose</h2>
+<p>The CCS oversees the design, implementation, and evaluation of clinical education in the MD curriculum, including required clerkships, acting internships, and other required clinical learning experiences in the clinical phases of the ASCEND curriculum. The committee ensures that clinical learning experiences provide appropriate opportunities for students to develop clinical knowledge, clinical skills, and professional competencies necessary for residency training.</p>
+<h2 id="responsibilities-1">Responsibilities</h2>
+<ul>
+<li><p>reviews the structure and implementation of required clerkships;</p></li>
+<li><p>monitors the quality and comparability of clinical learning experiences across clinical sites;</p></li>
+<li><p>reviews clerkship evaluation data and student performance outcomes;</p></li>
+<li><p>monitors assessment practices and grading standards used across clerkships;</p></li>
+<li><p>reviews integration of clinical and foundational science content in clinical education;</p></li>
+<li><p>identifies opportunities to enhance clinical learning experiences and assessment practices; and</p></li>
+<li><p>recommends curricular improvements to the EEC.</p></li>
+</ul>
+<h2 id="voting-members-24-seats">Voting Members (24 seats)</h2>
+<ul>
+<li><p>Faculty Co-Chair (1 seat);</p></li>
+<li><p>Clerkship and Associate Clerkship Directors for Clinical Clerkships (19 seats);</p></li>
+<li><p>Clinical Site Education Leader (MSHS) Representative (1 seat);</p></li>
+<li><p>Clinical Site Education Leader (Affiliate) Representative (1 seat); and</p></li>
+<li><p>Student Representatives, Phase 2/Phase 3 (2 seats).</p></li>
+</ul>
+<h2 id="non-voting-members-6-seats">Non-Voting Members (6 seats)</h2>
+<ul>
+<li><p>Administrative Co-Chair;</p></li>
+<li><p>Director of Clinical Competency;</p></li>
+<li><p>Director of Medical Student Electives;</p></li>
+<li><p>Director of Preclerkship Curriculum;</p></li>
+<li><p>Director of Integration and Transitions Phase; and</p></li>
+<li><p>Office of Assessment &amp; Evaluation Representative.</p></li>
+</ul>
+<h1 id="appendix-c.-curriculum-integration-subcommittee-cis">Appendix C. Curriculum Integration Subcommittee (CIS)</h1>
+<h2 id="purpose-2">Purpose</h2>
+<p>The CIS oversees horizontal and vertical integration across the MD curriculum. The committee monitors the alignment and sequencing of curricular content across phases and ensures that the curriculum supports progressive development of knowledge, skills, and professional competencies.</p>
+<h2 id="responsibilities-2">Responsibilities</h2>
+<ul>
+<li><p>reviews curriculum mapping data to ensure alignment with the Medical Education Program Objectives;</p></li>
+<li><p>identifies gaps or redundancies in curricular content across courses and clerkships;</p></li>
+<li><p>monitors integration of foundational and clinical sciences across curricular phases;</p></li>
+<li><p>reviews alignment of course and clerkship objectives with program outcomes;</p></li>
+<li><p>reviews integration of longitudinal curricular domains and scholarly activities; and</p></li>
+<li><p>recommends strategies to improve curricular integration across the medical education program.</p></li>
+</ul>
+<h2 id="voting-members-19-seats">Voting Members (19 seats)</h2>
+<ul>
+<li><p>Faculty Co-Chair (1 seat);</p></li>
+<li><p>Area of Concentration (AOC) Leads (4 seats: Scientific and Scholarly Discovery; Patient-Centered Advocacy; Healthcare Delivery Science; Leadership and Professional Identity Formation);</p></li>
+<li><p>Thread Leads (8 seats: Embryology; Physiology; Pharmacology; Nutrition; Artificial Intelligence; Medical Ethics; Communication Skills; Evidence-Based Medicine);</p></li>
+<li><p>Practice of Medicine (POM) Directors (3 seats: POM 1, POM 2, POM 3); and</p></li>
+<li><p>Student Representatives, Phase 1/2 or Phase 2/3 (3 seats).</p></li>
+</ul>
+<p><em>Note: When the same individual holds two voting seats on the CIS (for example, a Thread Lead seat and a POM Director seat), both seats remain structurally allocated to preserve the seat count if the individual departs one of the underlying roles; however, the individual exercises a single vote.</em></p>
+<h2 id="non-voting-members-4-seats">Non-Voting Members (4 seats)</h2>
+<ul>
+<li><p>Administrative Co-Chair;</p></li>
+<li><p>Director of Medical Student Research Office (MSRO);</p></li>
+<li><p>Director of Clinical Competency; and</p></li>
+<li><p>Office of Assessment &amp; Evaluation Representative.</p></li>
+</ul>
+<h1 id="appendix-d.-assessment-and-evaluation-subcommittee-aes">Appendix D. Assessment and Evaluation Subcommittee (AES)</h1>
+<h2 id="purpose-3">Purpose</h2>
+<p>The AES oversees assessment strategy and program evaluation across the MD curriculum. The committee ensures that assessment methods appropriately measure achievement of learning objectives and that program evaluation data are used to inform continuous improvement of the curriculum.</p>
+<h2 id="responsibilities-3">Responsibilities</h2>
+<ul>
+<li><p>reviews assessment strategies used across modules and clerkships;</p></li>
+<li><p>monitors alignment of assessment methods with the Medical Education Program Objectives;</p></li>
+<li><p>reviews student performance data and outcomes across the curriculum;</p></li>
+<li><p>monitors program evaluation data including module evaluations and national benchmarking results;</p></li>
+<li><p>evaluates the effectiveness of assessment practices used across the curriculum;</p></li>
+<li><p>identifies trends in student achievement and program outcomes; and</p></li>
+<li><p>develops recommendations to improve assessment and program evaluation processes.</p></li>
+</ul>
+<h2 id="voting-members-11-seats">Voting Members (11 seats)</h2>
+<ul>
+<li><p>Faculty Co-Chair (1 seat);</p></li>
+<li><p>Director of Assessment &amp; Evaluation (1 seat);</p></li>
+<li><p>Director of Clinical Competency (1 seat);</p></li>
+<li><p>Faculty-at-Large representatives (2 seats); and</p></li>
+<li><p>Student Representatives (6 seats: 2 Phase 1, 2 Phase 2, 2 Phase 3).</p></li>
+</ul>
+<h2 id="non-voting-members-1-seat">Non-Voting Members (1 seat)</h2>
+<ul>
+<li>Administrative Co-Chair.</li>
+</ul>
+<h1 id="appendix-e.-revision-log">Appendix E. Revision Log</h1>
+<p>This appendix documents the version history of these bylaws. Each row records a substantive revision, the date of the revision, the individual or office responsible, and a summary of the changes made. Editorial corrections that do not alter the meaning of the bylaws (for example, formatting, typographical corrections) are not required to be logged.</p>
+<p>Substantive revisions to the bylaws shall be approved in accordance with Article VIII (Amendments). The Office of Curricular Affairs is responsible for maintaining this log and the official version of the bylaws.</p>
+<table>
+<colgroup>
+<col style="width: 100%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Version</strong>** / ****Date**** / ****Author ****or ****Approver**</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1.0 / 2024 / Executive Education Committee</td>
+</tr>
+<tr class="even">
+<td><strong>Summary of Changes</strong></td>
+</tr>
+<tr class="odd">
+<td>Initial bylaws of the Executive Education Committee adopted to provide centralized faculty oversight of the MD program curriculum. Established the EEC as the principal governing committee for the curriculum and its standing subcommittees: Curriculum Steering, Pre-Clerkship (Phase 1), Clinical (Phase 2), Curriculum Integration, Student Affairs, and Assessment and Evaluation. Defined initial voting composition (1 Chair, 8 Faculty Educators, 4 Faculty Curricular Leaders, 2 Medical Students), four ex-officio non-voting Senior Associate Deans, and a Faculty Administrative Liaison.</td>
+</tr>
+<tr class="even">
+<td><strong>Version</strong>** / ****Date**** / ****Author ****or ****Approver**</td>
+</tr>
+<tr class="odd">
+<td>2.0 / PENDING / Executive Education Committee</td>
+</tr>
+<tr class="even">
+<td><strong>Summary of Changes</strong></td>
+</tr>
+<tr class="odd">
+<td>Comprehensive revision of the bylaws conducted as part of the annual continuous quality improvement (CQI) review of curricular governance. Substantive changes include: (1) restructured the standing subcommittees from six to four — retaining the Pre-Clerkship Curriculum (PCCS), Clinical Curriculum (CCS), Curriculum Integration (CIS), and Assessment and Evaluation (AES) Subcommittees, and discontinuing the Curriculum Steering Subcommittee and the Student Affairs Subcommittee as standalone EEC subcommittees; (2) revised EEC voting composition from 15 to 13 voting seats, expanding student representation from 2 to 4 (Phase 1, Phase 2, Phase 3, and MSTP) and consolidating Faculty Educator and Faculty Curricular Leader categories into a unified Faculty-at-Large category of 8 seats; (3) standardized all non-student member terms to three-year staggered terms (replacing the prior one-year-with-two-renewals structure) to support continuity and orderly turnover; (4) replaced the prior “ex officio” terminology and the enumerated list of named Senior Associate Deans with a new “Guests” framework (Article III, Section 4 and Article VI, Section 5), under which either the Faculty Co-Chair or the Administrative Co-Chair may invite guests based on institutional role and agenda relevance; (5) discontinued the Faculty Administrative Liaison to the Committee Chair role as a separate position, with corresponding responsibilities absorbed into the Administrative Co-Chair function; (6) added Article II, Section 3 establishing closed-loop monitoring of curricular actions, requiring documented follow-up review (within 12 months) of every action approved in response to outcome data; (7) added Article III, Section 6 establishing conflict-of-interest and recusal procedures; (8) added Article VII (Student Representation in Governance) providing rationale, role, and expected contributions of student representatives on each committee, and formally documenting the Student Advisory Group (SAG) as the umbrella grouping of all students in MD curriculum governance, led by the four EEC Student Representatives and accountable to the EEC Co-Chairs; (9) clarified that subcommittee Faculty Co-Chairs hold non-voting seats on the EEC for communication and reporting purposes; (10) added detailed provisions on quorum, voting procedures, asynchronous voting, proxy voting (prohibited), conflict-of-interest recusal, and meeting documentation requirements; (11) added Article VIII (Amendments) establishing a two-thirds vote threshold and Dean concurrence requirement for amendments; (12) added Appendices A–D defining membership composition for each standing subcommittee; and (13) added Appendix E (Revision Log) and a Document Status block on the title page to support version control and accreditation documentation.</td>
+</tr>
+</tbody>
+</table>
+<p><em>Note: The first row of the table above represents the original adoption of these bylaws. Subsequent rows are added as amendments are approved. When new rows are added, the version, date, status, and effective date fields on the title page (Document Status block) are updated to reflect the most recent approved version.</em></p>
+<h1 id="relationship-of-subcommittees-to-the-executive-education-committee">Relationship of Subcommittees to the Executive Education Committee</h1>
+<p>All standing subcommittees report to the EEC. Subcommittees review relevant data, identify curricular issues, and develop recommendations for improvement. Recommendations are presented to the EEC for discussion and decision in accordance with Article VI. Through this governance structure, the EEC maintains centralized faculty oversight of the medical education program while subcommittees provide detailed review and monitoring of specific components of the curriculum.</p>
+<p><em>— End of Bylaws —</em></p>
+<p>Page 1 of 2</p>
+
+      </div>
+
+      <footer class="docfoot">
+        <span>EEC Bylaws v2.0 · ASCEND Curriculum · ISMMS</span>
+        <span>A complete revision history is maintained in Appendix E.</span>
+      </footer>
+    </div>
+  </div>
+  <a class="toplink" href="#top">↑ Top</a>
+  <span id="top"></span>
+</body>
+</html>
